@@ -1,5 +1,11 @@
+# external imports
+
+# internal imports
+import player
+
+
 def main():
-    print("Hello from cs4120-final-project!")
+    player.Player("Tyler", []).hello()
 
 
 if __name__ == "__main__":
