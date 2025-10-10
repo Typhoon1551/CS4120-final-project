@@ -1,11 +1,13 @@
 # external imports
 
 # internal imports
-import player
+import items
+import character
 
 
 def main():
-    player.Player("Tyler", []).hello()
+    main_character = character.Character()
+    main_character.name = "Tyler"
 
 
 if __name__ == "__main__":
