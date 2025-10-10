@@ -3,38 +3,24 @@ class Item:
     name = ""
     description = ""
     icon = None
+    effect = None
 
-    def apply_effect(self, player, enemy):
-        pass
-
-
-class ActiveItem(Item):
-    active = True
-
-
-class PassiveItem(Item):
-    active = False
+    def __init__(self, _active, _name, _description, _icon, _effect):
+        self.active = _active
+        self.name = _name
+        self.description = _description
+        self.icon = _icon
+        self.effect = _effect
 
 
-######### Prefab Items ###########
+def health_potion(healing):
+    def e(player, enemy):
+        player.current_health += healing
 
-
-class HealthPotion(ActiveItem):
-    healing = 10
-
-    def apply_effect(self, player, enemy):
-        player.current_health += self.healing
-
-
-class Weapon(ActiveItem):
-    damage = 10
-
-    def apply_effect(self, player, enemy):
-        enemy.current_health -= self.damage
-
-
-class Armor(PassiveItem):
-    defense = 10
-
-    def apply_effect(self, player, enemy):
-        player.defense += self.defense
+    return Item(
+        True,
+        "Health Potion",
+        "",
+        None,
+        e,
+    )
