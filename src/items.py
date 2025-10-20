@@ -1,7 +1,7 @@
 class Item:
     active = None
-    name = ""
-    description = ""
+    name = None
+    description = None
     icon = None
     effect = None
 
@@ -13,8 +13,9 @@ class Item:
         self.effect = _effect
 
 
+# example item creation:
 def health_potion(healing):
-    def e(player, enemy):
+    def e(player, enemy, this):
         player.current_health += healing
 
     return Item(
@@ -23,4 +24,18 @@ def health_potion(healing):
         "",
         None,
         e,
+    )
+
+
+def empty_bottle():
+    def effect(player, enemy, this):
+        enemy.current_health -= 10
+        player.items.remove(this)
+
+    return Item(
+        True,
+        "Empty Bottle",
+        "",
+        None,
+        effect,
     )
