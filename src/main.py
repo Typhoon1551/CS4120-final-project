@@ -23,13 +23,13 @@ def main():
         if key[pygame.K_SPACE]:
             combat_main.combat_main(display, None, None)
 
-        if key[pygame.K_UP] == True or key[pygame.K_w] == True:
+        if key[pygame.K_UP] or key[pygame.K_w]:
             character.Character.character_design["top"] -= 10
-        elif key[pygame.K_DOWN] == True or key[pygame.K_s] == True:
+        elif key[pygame.K_DOWN] or key[pygame.K_s]:
             character.Character.character_design["top"] += 10
-        elif key[pygame.K_LEFT] == True or key[pygame.K_a] == True:
+        elif key[pygame.K_LEFT] or key[pygame.K_a]:
             character.Character.character_design["left"] -= 10
-        elif key[pygame.K_RIGHT] == True or key[pygame.K_d] == True:
+        elif key[pygame.K_RIGHT] or key[pygame.K_d]:
             character.Character.character_design["left"] += 10
 
         characterbuild = character.Character.character_design
