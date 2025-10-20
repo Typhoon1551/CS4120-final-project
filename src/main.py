@@ -6,6 +6,21 @@ import sys
 # internal imports
 import items
 import character
+def draw_player(characterbuild,display):
+    pygame.draw.rect(
+            display,
+            characterbuild["color"],
+            pygame.Rect(characterbuild["left"],characterbuild["top"],int(characterbuild["width"]),int(characterbuild["height"])))
+    pygame.draw.polygon(
+        display,
+        characterbuild["color"],
+        ((characterbuild["left"]+characterbuild["width"],characterbuild["top"]),(characterbuild["left"]+characterbuild["width"],characterbuild["top"]+characterbuild["height"]),(characterbuild["left"]+(characterbuild["width"]*2),characterbuild["top"]+(characterbuild["height"]/2)))
+    )
+    pygame.draw.polygon(
+        display,
+        characterbuild["color"],
+        ((characterbuild["left"]-characterbuild["width"],characterbuild["top"]),(characterbuild["left"]-characterbuild["width"],characterbuild["top"]+characterbuild["height"]),(characterbuild["left"],characterbuild["top"]+(characterbuild["height"]/2)))
+    )
 
 def main():
     pygame.init()
@@ -18,20 +33,16 @@ def main():
         key = pygame.key.get_pressed()
         if key[pygame.K_UP]==True or key[pygame.K_w] == True:
             character.Character.character_design["top"]-=10
-        elif key[pygame.K_DOWN]==True or key[pygame.K_s] == True:
+        if key[pygame.K_DOWN]==True or key[pygame.K_s] == True:
             character.Character.character_design["top"]+=10
-        elif key[pygame.K_LEFT]==True or key[pygame.K_a] == True:
+        if key[pygame.K_LEFT]==True or key[pygame.K_a] == True:
             character.Character.character_design["left"]-=10
-        elif key[pygame.K_RIGHT]==True or key[pygame.K_d] == True:
+        if key[pygame.K_RIGHT]==True or key[pygame.K_d] == True:
             character.Character.character_design["left"]+=10
         
         characterbuild = character.Character.character_design
-
-        pygame.draw.rect(
-            display,
-            characterbuild["color"],
-            pygame.Rect(characterbuild["left"],characterbuild["top"],int(characterbuild["width"]),int(characterbuild["height"])))
-
+        draw_player(characterbuild,display)
+        
         for event in pygame.event.get():
             if event.type == pygame.locals.QUIT:
                 pygame.quit()
