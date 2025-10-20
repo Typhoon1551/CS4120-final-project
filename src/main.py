@@ -16,12 +16,13 @@ def main():
         (display_size.current_w, display_size.current_h)
     )
 
-    combat_main.combat_main(display, None, None)
-
     while True:
         display.fill((225, 225, 225))
 
         key = pygame.key.get_pressed()
+        if key[pygame.K_SPACE]:
+            combat_main.combat_main(display, None, None)
+
         if key[pygame.K_UP] == True or key[pygame.K_w] == True:
             character.Character.character_design["top"] -= 10
         elif key[pygame.K_DOWN] == True or key[pygame.K_s] == True:

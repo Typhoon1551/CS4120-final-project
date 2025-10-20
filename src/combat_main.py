@@ -17,8 +17,20 @@ def combat_main(display: pygame.Surface, player, enemy):
         manager=manager,
     )
 
+    result = ""
+
     while running:
         for event in pygame.event.get():
+            match event.type:
+                case pygame.QUIT:
+                    result = "QUIT"
+                    running = False
+                case pygame_gui.UI_BUTTON_PRESSED:
+                    match event.ui_element:
+                        case exit_button:
+                            result = "QUIT"
+                            running = False
+
             manager.process_events(event)
 
         delta_time = clock.tick(60) / 1000
@@ -28,3 +40,5 @@ def combat_main(display: pygame.Surface, player, enemy):
         manager.draw_ui(display)
 
         pygame.display.update()
+
+    return result
