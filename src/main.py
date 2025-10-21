@@ -10,16 +10,24 @@ def draw_player(characterbuild,display):
     pygame.draw.rect(
             display,
             characterbuild["color"],
-            pygame.Rect(characterbuild["left"],characterbuild["top"],int(characterbuild["width"]),int(characterbuild["height"])))
+            pygame.Rect(characterbuild["left"],characterbuild["top"],int(characterbuild["width"]),int(characterbuild["height"])),
+            border_radius=5
+            )
     pygame.draw.polygon(
         display,
         characterbuild["color"],
-        ((characterbuild["left"]+characterbuild["width"],characterbuild["top"]),(characterbuild["left"]+characterbuild["width"],characterbuild["top"]+characterbuild["height"]),(characterbuild["left"]+(characterbuild["width"]*2),characterbuild["top"]+(characterbuild["height"]/2)))
+        ((characterbuild["left"]+characterbuild["width"]-5,characterbuild["top"]),(characterbuild["left"]+characterbuild["width"]-5,characterbuild["top"]+characterbuild["height"]),(characterbuild["left"]+(characterbuild["width"]*2-5),characterbuild["top"]+(characterbuild["height"]/2)))
     )
     pygame.draw.polygon(
         display,
         characterbuild["color"],
-        ((characterbuild["left"]-characterbuild["width"],characterbuild["top"]),(characterbuild["left"]-characterbuild["width"],characterbuild["top"]+characterbuild["height"]),(characterbuild["left"],characterbuild["top"]+(characterbuild["height"]/2)))
+        ((characterbuild["left"]-characterbuild["width"]+10,characterbuild["top"]),(characterbuild["left"]-characterbuild["width"]+10,characterbuild["top"]+characterbuild["height"]),(characterbuild["left"]+10,characterbuild["top"]+(characterbuild["height"]/2)))
+    )
+    pygame.draw.circle(
+        display,
+        (225,0,225),
+        (characterbuild["left"]+(characterbuild["width"]*0.75),characterbuild["top"]+(characterbuild["height"]*0.25)),
+        characterbuild["width"]*0.1
     )
 
 def main():
@@ -47,7 +55,7 @@ def main():
             if event.type == pygame.locals.QUIT:
                 pygame.quit()
                 sys.exit()
-        pygame.display.update()
+        pygame.display.flip()
 
 
 
