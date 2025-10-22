@@ -66,6 +66,8 @@ def combat_main(display: pygame.Surface, player: Character, enemy: Character):
                             window_width * (7 / 10),
                             window_height * (1 / 10),
                         ),
+                        text=item.name,
+                        manager=manager,
                     )
                 )
 
