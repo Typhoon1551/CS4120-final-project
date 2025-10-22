@@ -1,12 +1,13 @@
 from typing import Callable, Any
 from character import Character
+import pygame
 
 
 class Item:
-    active = None
-    name = None
-    description = None
-    icon = None
+    active: bool
+    name: str
+    description: str
+    icon: pygame.Surface | None
     effect: Callable[[Character, Character, "Item"], Any]
 
     def __init__(self, _active, _name, _description, _icon, _effect):

@@ -2,10 +2,10 @@ from items import Item
 
 
 class Character:
-    current_health: int = 0
+    current_health: int
     items: list[Item] = []
-    name = ""
-    description = ""
+    name: str
+    description: str
     character_design = {
         "color": (0, 120, 120),
         "left": 50,
