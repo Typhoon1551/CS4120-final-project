@@ -1,12 +1,20 @@
 import pygame
 import pygame_gui
 
+import common
+from character import Character
 
-def combat_main(display: pygame.Surface, player, enemy):
-    background = pygame.Surface(display.get_size())
+
+def combat_main(display: pygame.Surface, player: Character, enemy: Character):
+
+    # pygame stuff
+    window_width = display.get_size()[0]
+    window_height = display.get_size()[1]
+
+    background = pygame.Surface((window_width, window_height))
     background.fill((150, 150, 150))
 
-    manager = pygame_gui.UIManager(display.get_size())
+    manager = pygame_gui.UIManager((window_width, window_height))
 
     running = True
     clock = pygame.time.Clock()
@@ -19,7 +27,48 @@ def combat_main(display: pygame.Surface, player, enemy):
 
     result = ""
 
+    # Combat initialization
+    for item in player.items:
+        if not item.active:
+            item.effect(player, enemy, item)
+
+    for item in enemy.items:
+        if not item.active:
+            item.effect(enemy, player, item)
+
+    player_turn = True
+
+    # UI Elements
+    player_item_select = pygame_gui.elements.UISelectionList(
+        relative_rect=pygame.Rect(
+            window_width * (1 / 10),
+            window_height / 2,
+            window_width * (8 / 10),
+            window_height * (4 / 10),
+        ),
+        manager=manager,
+        item_list=[],
+    )
+
+    # main loop
     while running:
+
+        if player_turn:
+            player_item_buttons = []
+            for item in player.items:
+                if not item.active:
+                    continue
+                player_item_buttons.append(
+                    pygame_gui.elements.UIButton(
+                        pygame.Rect(
+                            0,
+                            0,
+                            window_width * (7 / 10),
+                            window_height * (1 / 10),
+                        ),
+                    )
+                )
+
         for event in pygame.event.get():
             match event.type:
                 case pygame.QUIT:
@@ -33,7 +82,7 @@ def combat_main(display: pygame.Surface, player, enemy):
 
             manager.process_events(event)
 
-        delta_time = clock.tick(60) / 1000
+        delta_time = clock.tick(common.FPS) / 1000
         manager.update(delta_time)
 
         display.blit(background, (0, 0))
