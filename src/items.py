@@ -1,9 +1,13 @@
+from typing import Callable, Any
+from character import Character
+
+
 class Item:
     active = None
     name = None
     description = None
     icon = None
-    effect = None
+    effect: Callable[[Character, Character, "Item"], Any]
 
     def __init__(self, _active, _name, _description, _icon, _effect):
         self.active = _active

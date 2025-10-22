@@ -1,10 +1,13 @@
+from items import Item
+
+
 class Character:
-    current_health = 0
-    items = []
+    current_health: int = 0
+    items: list[Item] = []
     name = ""
     description = ""
     character_design = {
-        "color": (0,120,120),
+        "color": (0, 120, 120),
         "left": 50,
         "top": 100,
         "width": 25,
