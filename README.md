@@ -16,9 +16,9 @@ This project uses [UV](https://docs.astral.sh/uv/) for dependency management. In
 - [ ] Design Player
 
 ### Story
-- [ ] Player Movement
-- [ ] Background
-- [ ] Interactive Map
+- [x] Player Movement
+- [x] Background
+- [x] Interactive Map
 - [ ] Obstacles
 - [ ] Combat Encounters
 
