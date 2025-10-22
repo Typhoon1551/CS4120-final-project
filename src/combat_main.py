@@ -1,5 +1,6 @@
 import pygame
 import pygame_gui
+import common
 
 
 def combat_main(display: pygame.Surface, player, enemy):
@@ -33,7 +34,7 @@ def combat_main(display: pygame.Surface, player, enemy):
 
             manager.process_events(event)
 
-        delta_time = clock.tick(60) / 1000
+        delta_time = clock.tick(common.FPS) / 1000
         manager.update(delta_time)
 
         display.blit(background, (0, 0))
