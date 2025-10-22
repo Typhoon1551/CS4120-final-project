@@ -1,9 +1,9 @@
-from items import Item
+from typing import Any
 
 
 class Character:
     current_health: int
-    items: list[Item] = []
+    inventory: list[Any] = []
     name: str
     description: str
     character_design = {
@@ -16,6 +16,6 @@ class Character:
 
     def __init__(self, _health, _starting_inven, _name, _description):
         self.current_health = _health
-        self.items = _starting_inven
+        self.inventory = _starting_inven
         self.name = _name
         self.description = _description

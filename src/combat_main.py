@@ -90,6 +90,6 @@ def combat_main(display: pygame.Surface, player: Character, enemy: Character):
         display.blit(background, (0, 0))
         manager.draw_ui(display)
 
-        pygame.display.update()
+        pygame.display.update(common.FPS)
 
     return result
