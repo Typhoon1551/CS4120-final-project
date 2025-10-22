@@ -60,7 +60,7 @@ def main():
     story.clear_flow()
 
     story.set_flow_rect(2, 0, 3, 15, 2.0, 0.0)
-    story.set_flow_rect(4, 15, 5, 16, 0.0, 1.8)
+    story.set_flow_rect(3, 15, 7, 16, 0.0, 1.8)
     story.set_flow_rect(6, 16, 7, 23, 2.2, 0.0)
 
     story.set_flow_rect(0, 7, 1, 7, 0.0, 1.6)
@@ -69,7 +69,7 @@ def main():
     story.set_flow_rect(5, 1, 5, 5, 1.2, 0.0)
     story.set_flow_rect(6, 1, 7, 1, 0.0, -1.2)
 
-    story.set_flow_rect(4, 10, 10, 10, 0.0, -1.3)
+    story.set_flow_rect(4, 10, 10, 12, 0.0, -1.3)
     story.set_flow_rect(6, 13, 7, 15, 1.0, 0.0)
 
     story.set_flow_rect(9, 15, 9, 16, 1.0, 0.0)
