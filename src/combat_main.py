@@ -7,7 +7,7 @@ from character import Character
 
 def combat_main(display: pygame.Surface, player: Character, enemy: Character):
 
-    # pygame stuff
+    ### pygame stuff ###
     window_width = display.get_size()[0]
     window_height = display.get_size()[1]
 
@@ -27,69 +27,60 @@ def combat_main(display: pygame.Surface, player: Character, enemy: Character):
 
     result = ""
 
-    # Combat initialization
-    for item in player.items:
+    ### Combat initialization ###
+    for item in player.inventory:
         if not item.active:
             item.effect(player, enemy, item)
 
-    for item in enemy.items:
+    for item in enemy.inventory:
         if not item.active:
             item.effect(enemy, player, item)
 
     player_turn = True
 
-    # UI Elements
-    player_item_select = pygame_gui.elements.UISelectionList(
-        relative_rect=pygame.Rect(
-            window_width * (1 / 10),
-            window_height / 2,
-            window_width * (8 / 10),
-            window_height * (4 / 10),
-        ),
-        manager=manager,
-        item_list=[],
-    )
+    ### UI Elements ###
 
-    # main loop
+    ### main loop ###
     while running:
 
         if player_turn:
             player_item_buttons = []
-            for item in player.items:
-                if not item.active:
-                    continue
-                player_item_buttons.append(
-                    pygame_gui.elements.UIButton(
-                        pygame.Rect(
-                            0,
-                            0,
-                            window_width * (7 / 10),
-                            window_height * (1 / 10),
-                        ),
-                        text=item.name,
-                        manager=manager,
+            for i in range(len(player.inventory)):
+                item = player.inventory[i]
+                if item.active:
+                    player_item_buttons.append(
+                        pygame_gui.elements.UIButton(
+                            pygame.Rect(
+                                window_width / 2,
+                                (window_height / 12 * (i + 1)),
+                                window_width * (2 / 5),
+                                window_height / 13,
+                            ),
+                            item.name,
+                            manager,
+                            command=lambda: item.effect(player, enemy, item),
+                        )
                     )
-                )
 
         for event in pygame.event.get():
-            match event.type:
-                case pygame.QUIT:
-                    result = "QUIT"
-                    running = False
-                case pygame_gui.UI_BUTTON_PRESSED:
-                    match event.ui_element:
-                        case exit_button:
-                            result = "QUIT"
-                            running = False
+            if event.type == pygame.QUIT:
+                result = "quit"
+                running = False
+            elif event.type == pygame_gui.UI_BUTTON_PRESSED:
+                if event.ui_element == exit_button:
+                    result = "quit"
+                    running = "false"
 
             manager.process_events(event)
 
         delta_time = clock.tick(common.FPS) / 1000
+
+        ### UI Updates ###
         manager.update(delta_time)
 
         display.blit(background, (0, 0))
         manager.draw_ui(display)
 
-        pygame.display.update(common.FPS)
+        pygame.display.update()
 
     return result
