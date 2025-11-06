@@ -72,21 +72,24 @@ def main():
     )
     story.clear_flow()
 
+    #main Tube
     story.set_flow_rect(2, 0, 3, 15, 2.0, 0.0)
-    story.set_flow_rect(3, 15, 7, 16, 0.0, 1.8)
     story.set_flow_rect(6, 16, 7, 23, 2.2, 0.0)
 
-    story.set_flow_rect(0, 7, 1, 7, 0.0, 1.6)
-    story.set_flow_rect(8, 19, 10, 19, 0.0, -1.4)
+    story.set_flow_rect(1, 15, 8, 16, 1.0, 1.8)
 
+
+    story.set_flow_rect(8, 19, 10, 19, 0.0, -1.4)
     story.set_flow_rect(5, 1, 5, 5, 1.2, 0.0)
     story.set_flow_rect(6, 1, 7, 1, 0.0, -1.2)
+    #first hole, straight down.
+    story.set_flow_rect(3, 5, 11, 5, 0.5, -2.6)
 
-    story.set_flow_rect(4, 10, 10, 12, 0.0, -1.3)
+    story.set_flow_rect(3, 10, 10, 12, 0.0, -1.3)
     story.set_flow_rect(6, 13, 7, 15, 1.0, 0.0)
 
     story.set_flow_rect(9, 15, 9, 16, 1.0, 0.0)
-    story.set_flow_rect(7, 8, 7, 10, 1.0, 0.0)
+    story.set_flow_rect(7, 8, 7, 9, 1.0, 0.0)
 
     tilesw = 3
     tilesh = 3
