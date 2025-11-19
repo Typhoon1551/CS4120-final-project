@@ -42,8 +42,10 @@ def combat_main(display: pygame.Surface, player: Character, enemy: Character):
 
     ### main loop ###
     while running:
+        display.blit(background, (0, 0))
 
         if player_turn:
+            print(len(player.inventory))
             player_item_buttons = []
             for i in range(len(player.inventory)):
                 item = player.inventory[i]
@@ -61,6 +63,7 @@ def combat_main(display: pygame.Surface, player: Character, enemy: Character):
                             command=lambda: item.effect(player, enemy, item),
                         )
                     )
+            print(len(player_item_buttons))
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -77,8 +80,6 @@ def combat_main(display: pygame.Surface, player: Character, enemy: Character):
 
         ### UI Updates ###
         manager.update(delta_time)
-
-        display.blit(background, (0, 0))
         manager.draw_ui(display)
 
         pygame.display.update()
