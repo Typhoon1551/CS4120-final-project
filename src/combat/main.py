@@ -78,7 +78,7 @@ def combat_main(display: pygame.Surface, player: Character, enemy: Character):
         color=BG_COLOR,
     )
     enemy_hp_bar = ui.ProgressBar(
-        (20, window_height // 2 + 120),
+        (20, window_height // 2 + 100),
         (window_width // 2 - 40, 40),
         enemy.max_health,
         enemy.current_health,

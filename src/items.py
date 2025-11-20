@@ -1,6 +1,7 @@
 from typing import Callable, Any
 from character import Character
 import pygame
+import maths
 
 
 class Item:
@@ -22,6 +23,9 @@ class Item:
 def health_potion(healing):
     def e(player: Character, enemy: Character, this: Item):
         player.current_health += healing
+        player.current_health = maths.clamp(
+            player.current_health, 0, player.max_health
+        )
         player.inventory.remove(this)
         player.inventory.append(empty_bottle())
 
