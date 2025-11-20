@@ -25,12 +25,14 @@ This project uses [UV](https://docs.astral.sh/uv/) for dependency management. In
 ### Combat
 - [ ] Custom UI Framework
   - [x] Buttons
-  - [ ] Text Boxes
+  - [x] Text Boxes
   - [ ] Health Bars
   - [ ] Icons
   - [ ] Tooltips
 - [x] Run passive item effects at start of battle
-- [ ] Item Selection
-- [ ] Run active item effect when used
+- [x] Item Selection
+- [x] Run active item effect when used
 - [ ] Initialize combat data
+- [ ] Turn Cycle
+- [ ] Enemy AI
 - [ ] Return win/lose state
