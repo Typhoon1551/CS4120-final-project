@@ -6,7 +6,7 @@ import sys
 # internal imports
 import items
 import character
-import combat_main
+from combat.main import combat_main
 from adventure import story
 import common
 
@@ -245,7 +245,7 @@ def main():
                 _help_ticks -= 1
 
         if key[pygame.K_SPACE]:
-            combat_main.combat_main(display, player, enemy1)
+            combat_main(display, player, enemy1)
 
         for event in pygame.event.get():
             if event.type == pygame.locals.QUIT:
