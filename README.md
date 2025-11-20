@@ -26,7 +26,7 @@ This project uses [UV](https://docs.astral.sh/uv/) for dependency management. In
 - [ ] Custom UI Framework
   - [x] Buttons
   - [x] Text Boxes
-  - [ ] Health Bars
+  - [x] Progress Bars
   - [ ] Icons
   - [ ] Tooltips
 - [x] Run passive item effects at start of battle

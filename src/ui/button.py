@@ -50,7 +50,6 @@ class Button:
         )
 
     def hovered(self) -> bool:
-
         mouse_pos = pygame.mouse.get_pos()
 
         check_x = (
