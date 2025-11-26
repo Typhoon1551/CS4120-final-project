@@ -28,7 +28,7 @@ This project uses [UV](https://docs.astral.sh/uv/) for dependency management. In
   - [x] Text Boxes
   - [x] Progress Bars
   - [ ] Icons
-  - [ ] Tooltips
+  - [x] Tooltips
 - [x] Run passive item effects at start of battle
 - [x] Item Selection
 - [x] Run active item effect when used

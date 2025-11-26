@@ -25,7 +25,9 @@ class Item:
 def health_potion(healing):
     def e(player: Character, enemy: Character, this: Item):
         player.current_health += healing
-        player.current_health = maths.clamp(player.current_health, 0, player.max_health)
+        player.current_health = maths.clamp(
+            player.current_health, 0, player.max_health
+        )
         player.inventory.remove(this)
         player.inventory.append(empty_bottle())
 
@@ -46,7 +48,7 @@ def empty_bottle():
     return Item(
         True,
         "Empty Bottle",
-        "",
+        "Break on enemy's head to deal 10 damage",
         None,
         effect,
     )

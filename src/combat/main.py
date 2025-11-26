@@ -106,12 +106,21 @@ def combat_main(display: pygame.Surface, player: Character, enemy: Character):
                     hovered_color=(150, 150, 150),
                     padding=15,
                     id=i,
+                ).tooltip(
+                    player.inventory[i].description,
+                    (168, 123, 71),
+                    1.0,
+                    (0, 0, 0),
+                    18,
+                    10,
                 )
             )
 
         for i in inventory_buttons:
             if i.pressed():
-                player.inventory[i.id].effect(player, enemy, player.inventory[i.id])
+                player.inventory[i.id].effect(
+                    player, enemy, player.inventory[i.id]
+                )
 
         ### Update Profiles ###
         player_hp_bar.value = player.current_health
@@ -122,8 +131,8 @@ def combat_main(display: pygame.Surface, player: Character, enemy: Character):
 
         if player_turn:
             inventory_title.render(display)
-            for i in inventory_buttons:
-                i.render(display)
+            for i in range(len(inventory_buttons) - 1, -1, -1):
+                inventory_buttons[i].render(display)
 
         player_title.render(display)
         player_hp_bar.render(display)
