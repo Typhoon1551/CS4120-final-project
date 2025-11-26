@@ -1,3 +1,4 @@
+from pickle import TUPLE
 from typing import Any
 
 import pygame
@@ -9,12 +10,10 @@ import ui
 class Button:
     position: tuple[int, int]
     size: tuple[int, int]
-    icon: None
     id: Any | None
-    text: str
-    padding: int
-    font_color: tuple[int, int, int]
-    font_family: tuple[str, bool]
+    text_box: Any
+    color: tuple[int, int, int]
+    hovered_color: tuple[int, int, int]
 
     def __init__(
         self,
@@ -25,16 +24,23 @@ class Button:
         text_font: tuple[str, bool] = ("Arial", True),
         id: Any | None = None,
         color: tuple[int, int, int] = (255, 255, 255),
+        hovered_color: tuple[int, int, int] = (200, 200, 200),
         padding: int = 0,
     ):
         self.position = position
         self.size = size
         self.id = id
+        self.text_box = ui.TextBox(
+            self.position,
+            self.size,
+            text,
+            text_color,
+            text_font,
+            color,
+            padding,
+        )
         self.color = color
-        self.padding = padding
-        self.font_color = text_color
-        self.font_family = text_font
-        self.text = text
+        self.hovered_color = hovered_color
 
     def pressed(self) -> bool:
         return self.hovered() and pygame.mouse.get_just_pressed()[0]
@@ -43,16 +49,11 @@ class Button:
         return self.hovered() and pygame.mouse.get_pressed()[0]
 
     def render(self, surface: pygame.Surface):
-        pygame.draw.rect(surface, self.color, self.position + self.size)
-        surface.blit(
-            ui.draw_text(
-                self.text,
-                self.size[0] - self.padding * 2,
-                self.size[1] - self.padding * 2,
-                color=(0, 0, 0),
-            ),
-            (self.position[0] + self.padding, self.position[1] + self.padding),
-        )
+        if self.hovered():
+            self.text_box.color = self.hovered_color
+        else:
+            self.text_box.color = self.color
+        self.text_box.render(surface)
 
     def hovered(self) -> bool:
         mouse_pos = pygame.mouse.get_pos()

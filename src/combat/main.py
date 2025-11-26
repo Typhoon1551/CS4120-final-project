@@ -1,14 +1,13 @@
 import pygame
 
 import common
-from character import Character
 import ui
+from character import Character
 
 BG_COLOR = (135, 206, 235)
 
 
 def combat_main(display: pygame.Surface, player: Character, enemy: Character):
-
     ### pygame stuff ###
     window_width = display.get_size()[0]
     window_height = display.get_size()[1]
@@ -37,11 +36,12 @@ def combat_main(display: pygame.Surface, player: Character, enemy: Character):
         (20, window_height - 70),
         (100, 50),
         "EXIT",
-        color=(255, 0, 0),
+        color=(255, 255, 255),
+        hovered_color=(255, 0, 0),
         padding=10,
     )
 
-    inventory_title = ui.Button(
+    inventory_title = ui.TextBox(
         (window_width // 2, 20),
         (window_width // 2 - 20, 80),
         "Which item to use?",
@@ -52,7 +52,7 @@ def combat_main(display: pygame.Surface, player: Character, enemy: Character):
     ### Combatant Profiles ###
 
     ### Player Profile ###
-    player_title = ui.Button(
+    player_title = ui.TextBox(
         (20, 20),
         (window_width // 2 - 40, 80),
         player.name,
@@ -70,7 +70,7 @@ def combat_main(display: pygame.Surface, player: Character, enemy: Character):
 
     ### Enemy Profile
 
-    enemy_title = ui.Button(
+    enemy_title = ui.TextBox(
         (20, window_height // 2),
         (window_width // 2 - 40, 80),
         enemy.name,
@@ -91,11 +91,6 @@ def combat_main(display: pygame.Surface, player: Character, enemy: Character):
         display.blit(background, (0, 0))
 
         ### Exit Button ###
-        if exit_button.hovered():
-            exit_button.color = (255, 0, 0)
-        else:
-            exit_button.color = (255, 255, 255)
-
         if exit_button.pressed():
             running = False
 
@@ -108,21 +103,15 @@ def combat_main(display: pygame.Surface, player: Character, enemy: Character):
                     (window_width // 2 - 20, 80),
                     player.inventory[i].name,
                     color=(200, 200, 200),
+                    hovered_color=(150, 150, 150),
                     padding=15,
                     id=i,
                 )
             )
 
         for i in inventory_buttons:
-            if i.hovered():
-                i.color = (150, 150, 150)
-            else:
-                i.color = (200, 200, 200)
-
             if i.pressed():
-                player.inventory[i.id].effect(
-                    player, enemy, player.inventory[i.id]
-                )
+                player.inventory[i.id].effect(player, enemy, player.inventory[i.id])
 
         ### Update Profiles ###
         player_hp_bar.value = player.current_health
