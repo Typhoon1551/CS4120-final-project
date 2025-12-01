@@ -12,6 +12,12 @@ import common
 
 
 def draw_player(characterbuild, display):
+	left = int(characterbuild['left'])
+	top = int(characterbuild['top'])
+	width = int(characterbuild['width'])
+	height = int(characterbuild['height'])
+	color = characterbuild['color']
+	facing = characterbuild.get('facing', 'R')
     left = int(characterbuild['left'])
     top = int(characterbuild['top'])
     width = int(characterbuild['width'])
@@ -19,29 +25,44 @@ def draw_player(characterbuild, display):
     color = characterbuild['color']
     facing = characterbuild.get('facing', 'R')
 
-    body = pygame.Rect(left, top, width, height)
-    pygame.draw.rect(display, color, body, border_radius=5)
+	body = pygame.Rect(left, top, width, height)
+	pygame.draw.rect(display, color, body, border_radius=5)
 
-    nose_R = (
-        (left + width - 5, top),
-        (left + width - 5, top + height),
-        (left + (width * 2 - 5), top + (height // 2)),
-    )
-    tail_R = (
-        (left - width + 10, top),
-        (left - width + 10, top + height),
-        (left + 10, top + (height // 2)),
-    )
+	nose_R = (
+		(left + width - 5, top),
+		(left + width - 5, top + height),
+		(left + (width * 2 - 5), top + (height // 2)),
+	)
+	tail_R = (
+		(left - width + 10, top),
+		(left - width + 10, top + height),
+		(left + 10, top + (height // 2)),
+	)
 
-    cx = left + width // 2
-    cy = top + height // 2
+	cx = left + width // 2
+	cy = top + height // 2
 
-    def mirror_x(poly):
-        return tuple((2 * cx - x, y) for (x, y) in poly)
+	def mirror_x(poly):
+		return tuple((2 * cx - x, y) for (x, y) in poly)
 
-    def rotate90(poly):
-        return tuple((cx + (y - cy), cy - (x - cx)) for (x, y) in poly)
+	def rotate90(poly):
+		return tuple((cx + (y - cy), cy - (x - cx)) for (x, y) in poly)
 
+	if facing == 'R':
+		nose, tail = nose_R, tail_R
+		eye = (left + int(width * 0.75), top + int(height * 0.25))
+	elif facing == 'L':
+		nose, tail = mirror_x(nose_R), mirror_x(tail_R)
+		eye = (left + int(width * 0.25), top + int(height * 0.25))
+	elif facing == 'U':
+		nose, tail = rotate90(nose_R), rotate90(tail_R)
+		eye = (left + int(width * 0.25), top + int(height * 0.25))
+	else:
+		nose, tail = (
+			rotate90(rotate90(rotate90(nose_R))),
+			rotate90(rotate90(rotate90(tail_R))),
+		)
+		eye = (left + int(width * 0.25), top + int(height * 0.75))
     if facing == 'R':
         nose, tail = nose_R, tail_R
         eye = (left + int(width * 0.75), top + int(height * 0.25))
@@ -58,11 +79,11 @@ def draw_player(characterbuild, display):
         )
         eye = (left + int(width * 0.25), top + int(height * 0.75))
 
-    pygame.draw.polygon(display, color, nose)
-    pygame.draw.polygon(display, color, tail)
-    pygame.draw.circle(
-        display, (225, 0, 225), (int(eye[0]), int(eye[1])), int(width * 0.1)
-    )
+	pygame.draw.polygon(display, color, nose)
+	pygame.draw.polygon(display, color, tail)
+	pygame.draw.circle(
+		display, (225, 0, 225), (int(eye[0]), int(eye[1])), int(width * 0.1)
+	)
 
 
 def main():
@@ -104,7 +125,7 @@ def main():
     _help_ticks = 500
     _hit_cooldown = 0
 
-    clock = pygame.time.Clock()
+	clock = pygame.time.Clock()
 
     ### Player/Enemy Initialization ###
     player = character.Character(
@@ -127,21 +148,21 @@ def main():
         'A mean-looking barracuda',
     )
 
-    ### Main Loop ###
-    while True:
-        key = pygame.key.get_pressed()
-        dx = dy = 0
-        speed = 6
-        if key[pygame.K_UP] or key[pygame.K_w]:
-            dy -= speed
-        if key[pygame.K_DOWN] or key[pygame.K_s]:
-            dy += speed
-        if key[pygame.K_LEFT] or key[pygame.K_a]:
-            dx -= speed
-        if key[pygame.K_RIGHT] or key[pygame.K_d]:
-            dx += speed
-        if _hit_cooldown > 0:
-            _hit_cooldown -= 1
+	### Main Loop ###
+	while True:
+		key = pygame.key.get_pressed()
+		dx = dy = 0
+		speed = 6
+		if key[pygame.K_UP] or key[pygame.K_w]:
+			dy -= speed
+		if key[pygame.K_DOWN] or key[pygame.K_s]:
+			dy += speed
+		if key[pygame.K_LEFT] or key[pygame.K_a]:
+			dx -= speed
+		if key[pygame.K_RIGHT] or key[pygame.K_d]:
+			dx += speed
+		if _hit_cooldown > 0:
+			_hit_cooldown -= 1
 
         cd = player.character_design
         vis_rect = pygame.Rect(
@@ -155,9 +176,9 @@ def main():
         )
         phys_rect.center = vis_rect.center
 
-        fx, fy = story.flow_at(phys_rect.centerx, phys_rect.centery)
-        mdx = dx + int(round(fx))
-        mdy = dy + int(round(fy))
+		fx, fy = story.flow_at(phys_rect.centerx, phys_rect.centery)
+		mdx = dx + int(round(fx))
+		mdy = dy + int(round(fy))
 
         if mdx == 0 and mdy == 0 and (fx or fy):
             nudge_x = 1 if fx > 0 else -1 if fx < 0 else 0
@@ -189,8 +210,8 @@ def main():
             cd['left'], cd['top'] = vis_rect.left, vis_rect.top
         cam_off = story.get_camera_offset(phys_rect, veiw_w, veiwh)
 
-        story.draw_drain_chamber(render_surf, cam_off)
-        story.update_and_draw_debris(render_surf, cam_off)
+		story.draw_drain_chamber(render_surf, cam_off)
+		story.update_and_draw_debris(render_surf, cam_off)
 
         screen_space_cd = dict(cd)
         screen_space_cd['left'] = cd['left'] - cam_off[0]
@@ -212,7 +233,7 @@ def main():
                     _hit_cooldown = 45
                 break
 
-        pygame.transform.scale(render_surf, display.get_size(), display)
+		pygame.transform.scale(render_surf, display.get_size(), display)
 
         if _help_ticks > 0:
             if any(key[i] for i in range(len(key))):
@@ -234,16 +255,16 @@ def main():
                 display.blit(overlay, (0, 0))
                 _help_ticks -= 1
 
-        if key[pygame.K_SPACE]:
-            combat_main(display, player, enemy1)
+		if key[pygame.K_SPACE]:
+			combat_main(display, player, enemy1)
 
-        for event in pygame.event.get():
-            if event.type == pygame.locals.QUIT:
-                pygame.quit()
-                sys.exit()
-        pygame.display.flip()
+		for event in pygame.event.get():
+			if event.type == pygame.locals.QUIT:
+				pygame.quit()
+				sys.exit()
+		pygame.display.flip()
 
-        clock.tick(common.FPS)
+		clock.tick(common.FPS)
 
 
 if __name__ == '__main__':
