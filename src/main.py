@@ -25,12 +25,12 @@ def draw_player(characterbuild, display):
     nose_R = (
         (left + width - 5, top),
         (left + width - 5, top + height),
-        (left + (width * 2 - 5), top + (height // 2)),
+        (left + (width * 2 - 5), top + (height // 2))
     )
     tail_R = (
         (left - width + 10, top),
         (left - width + 10, top + height),
-        (left + 10, top + (height // 2)),
+        (left + 10, top + (height // 2))
     )
 
     cx = left + width // 2
@@ -70,8 +70,11 @@ def main():
     display = pygame.display.set_mode(
         (display_size.current_w, display_size.current_h)
     )
-    story.clear_flow()
+    story.setup_flow()
 
+    '''
+    story.clear_flow()
+    #set_flow_rect(r0: int, c0: int, r1: int, c1: int, fx: float, fy: float)
     #main Tube
     story.set_flow_rect(2, 0, 3, 15, 2.0, 0.0)
     story.set_flow_rect(6, 16, 7, 23, 2.2, 0.0)
@@ -89,8 +92,8 @@ def main():
     story.set_flow_rect(6, 13, 7, 15, 1.0, 0.0)
 
     story.set_flow_rect(9, 15, 9, 16, 1.0, 0.0)
-    story.set_flow_rect(7, 8, 7, 9, 1.0, 0.0)
-
+    story.set_flow_rect(7, 7, 7, 10, 1.0, 0.0)
+    '''
     tilesw = 3
     tilesh = 3
     veiw_w = tilesw * story.TILE_SIZE
@@ -151,8 +154,8 @@ def main():
         mdy = dy + int(round(fy))
 
         if mdx == 0 and mdy == 0 and (fx or fy):
-            nudge_x = 1 if fx > 0 else -1 if fx < 0 else 0
-            nudge_y = 1 if fy > 0 else -1 if fy < 0 else 0
+            nudge_x = 5 if fx > 0 else -5 if fx < 0 else 0
+            nudge_y = 5 if fy > 0 else -5 if fy < 0 else 0
             test = phys_rect.move(nudge_x, 0)
             if not story.rect_collides_walls(test):
                 phys_rect = test
