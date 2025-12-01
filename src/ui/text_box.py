@@ -1,7 +1,5 @@
-from typing import Any
 
 import pygame
-from pygame.typing import ColorLike
 
 import ui
 
