@@ -124,22 +124,41 @@ def is_enemey(rect:Rect) -> bool:
 				if rect.colliderect(tile_rect):
 					return True
 	return False
-
-def try_move(rect: Rect, dx: int, dy: int) -> Rect:
+def remove_enemy(rect:Rect) -> bool:
+	left_tile = max(0, rect.left // TILE_SIZE)
+	right_tile = min(MAP_W_TILES - 1, max(0, (rect.right - 1) // TILE_SIZE))
+	top_tile = max(0, rect.top // TILE_SIZE)
+	bottom_tile = min(MAP_H_TILES - 1, max(0, (rect.bottom - 1) // TILE_SIZE))
+	for r in range(top_tile, bottom_tile + 1):
+		for c in range(left_tile, right_tile + 1):
+			if DRAIN_CHAMBER_ROWS[r][c] == T_ENEMY:
+				tile_rect = Rect(
+					c * TILE_SIZE, r * TILE_SIZE, TILE_SIZE, TILE_SIZE
+				)
+				if rect.colliderect(tile_rect):
+					DRAIN_CHAMBER_ROWS[r][c] = T_EMPTY
+R = 0
+def try_move(rect: Rect, dx: int, dy: int):
+	try:
+		R+=1
+	except:
+		R=0
 	zero=random.randint(-1,1)
-	r = rect.move(dx, 0)
-	if not rect_collides_walls(r):
-		rect = r
-	else:
-		rect = try_move(rect,dx*(-5),(dy+zero)*(4))
-	r1 = rect.move(0, dy)
-	if not rect_collides_walls(r1):
-		rect = r1
-	else:
-		rect = try_move(rect,(dx+zero)*(4),dy*(-5))
+	if abs(dx)<30 or abs(dy)<30 and R<100:
+		r = rect.move(dx, dy)
+		if not rect_collides_walls(r):
+			rect = r
+		else:
+			rect = try_move(rect,(dx+zero)*(-4),(dy+zero)*(-4))
+		'''r1 = rect.move(0, )
+		if not rect_collides_walls(r1):
+			rect = r1
+		else:
+			rect = try_move(rect,(dx+zero)*(4),dy*(-5))'''
 
-	rect.left = max(0, min(rect.left, MAP_W_PX - rect.width))
-	rect.top  = max(0, min(rect.top,  MAP_H_PX - rect.height))
+		rect.left = max(0, min(rect.left, MAP_W_PX - rect.width))
+		rect.top  = max(0, min(rect.top,  MAP_H_PX - rect.height))
+	R=0
 	return rect
 
 
@@ -274,26 +293,26 @@ def spawn_debris_near(cx: int, cy: int, count: int = 3):
 
 FLOW: dict[tuple[int, int], tuple[float, float]] = {
 	(2, 0): (2.0, 0.0), (2, 1): (2.0, 0.0), (2, 2): (2.0, 0.0), (2, 3): (2.0, 0.0), 
-	(2, 4): (2.0, 0.0), (2, 5): (2.0, 0.0), (2, 6): (2.0, 0.0), (2, 7): (2.0, 1.2), 
+	(2, 4): (2.0, 0.0), (2, 5): (2.0, 0.5), (2, 6): (2.0, 0.0), (2, 7): (2.0, 1.2), 
 	(2, 8): (2.0, 0.0), (2, 9): (2.0, 0.0), (2, 10): (2.0, 0.0), (2, 11): (2.0, 0.0), 
-	(2, 12): (2.0, 0.0), (2, 13): (2.0, 0.0), (2, 14): (2.0, 0.0), (2, 15): (2.0, 1.5), 
-	(3, 0): (2.0, 0.0), (3, 1): (2.0, 0.0), (3, 2): (2.0, 0.0), (3, 3): (2.0, 0.0), (3, 4): 
-	(2.0, 0.0), (3, 5): (2.0, 1.0), (3, 6): (2.0, 0.0), (3, 7): (2.0, 0.0), (3, 8): (2.0, 0.0), 
+	(2, 12): (2.0, 0.0), (2, 13): (2.0, 0.0), (2, 14): (2.0, 0.0), (2, 15): (0.5, 3.0),(2,19):(0.0,-1.0),(3,19):(0.0,-5.0), 
+	(3, 0): (2.0, 0.0), (3, 1): (2.0, 0.0), (3, 2): (2.0, 0.0), (3, 3): (2.0, 0.0), 
+	(3, 4): (2.0, 0.0), (3, 5): (2.0, -2.0), (3, 6): (2.0, 0.0), (3, 7): (2.0, 0.0), (3, 8): (2.0, 0.0), 
 	(3, 9): (2.0, 0.0), (3, 10): (2.0, 0.0), (3, 11): (2.0, 0.0), (3, 12): (2.0, 0.0), (3, 13): 
-	(2.0, 0.0), (3, 14): (2.0, 0.0), (3, 15): (2.0, 0.0), (3, 16): (0.0, 2.0), (4, 16): (0.0, 2.0), 
-	(5, 16): (0.0, 2.0), (6, 16): (2.3, 2.0), (6, 17): (2.3, 0.0), (6, 18): (2.3, 0.0), (6, 19): 
+	(2.0, 0.0), (3, 14): (2.0, 0.0), (3, 15): (2.0, 0.0), (3, 16): (1.0, 2.0), (4, 16): (1.0, 2.0), 
+	(5, 16): (1.0, 2.0), (6, 16): (3.3, 2.0), (6, 17): (2.3, 0.0), (6, 18): (2.3, 0.0), (6, 19): 
 	(2.3, 0.0), (6, 20): (2.3, 0.0), (6, 21): (2.3, 0.0), (6, 22): (2.3, 0.0), (6, 23): (2.3, 0.0), 
 	(7, 16): (2.3, 0.0), (7, 17): (2.3, 0.0), (7, 18): (2.3, 0.0), (7, 19): (2.3, 0.0), (7, 20): 
 	(2.3, 0.0), (7, 21): (2.3, 0.0), (7, 22): (2.3, 0.0), (7, 23): (2.3, 0.0), (1, 16): (-1.5, 0.0), 
-	(1, 17): (-1.5, 0.0), (1, 18): (-1.5, 0.0), (1, 19): (-1.5, 0.0), (1, 20): (-1.5, 0.0), 
-	(1, 21): (-1.5, 0.0), (1, 22): (-1.5, 0.0), (1, 15): (-1.5, 1.5), (1, 7): (0.0, 1.2), 
+	(1, 17): (-1.5, 0.0), (1, 18): (-1.5, 0.0), (1, 19): (-1.5, -1.5), (1, 20): (-1.5, 0.0), 
+	(1, 21): (-1.5, 0.0), (1, 22): (-1.5, 0.0), (1, 15): (-2.5, 2.5), (1, 7): (0.0, 1.2), 
 	(5, 1): (1.8, 0.0), (5, 2): (1.8, 0.0), (5, 3): (1.8, 0.0), (5, 4): (1.8, 0.0), (5, 5): (1.8, -1.4), 
-	(4, 5): (0.0, -1.4), (6, 5): (0.0, -1.4), (7, 5): (0.0, -1.4), (8, 5): (0.0, -1.4), 
+	(4, 5): (-1.0, -1.4), (6, 5): (0.0, -1.4), (7, 5): (0.0, -1.4), (8, 5): (0.0, -1.4), 
 	(9, 5): (0.0, -1.4), (10, 5): (0.0, -1.4), (4, 10): (0.0, -1.2), (5, 10): (0.0, -1.2), 
 	(6, 10): (0.0, -1.2), (7, 10): (0.0, -1.2), (8, 10): (0.0, -1.2), (9, 10): (0.0, -1.2), 
 	(10, 10): (0.0, -1.2), (6, 12): (1.4, 0.0), (6, 13): (1.4, 0.0), (6, 14): (1.4, 0.0), 
 	(7, 14): (0.0, 1.0), (9, 15): (1.0, 0.0), (9, 16): (1.0, 0.0), (9, 1): (0.0, -1.0), 
-	(10, 1): (0.0, -1.0), (10, 3): (1.0, 0.0), (10, 4): (1.0, 0.0)}
+	(10, 1): (0.0, -1.0), (10, 3): (1.0, 0.0), (10, 4): (1.0, 0.0), (10,8):(-10.0,-10.0),(9,8):(-1.0,-1.0)}
 
 def clear_flow():
 	FLOW.clear()
@@ -325,8 +344,8 @@ def flow_at(x, y):
 	return FLOW.get((r, c), (0.0, 0.0))
 
 def setup_flow():
+	'''
 	clear_flow()
-
 	# MAIN TRUNK — TOP HORIZONTAL
 	# rows 2–3, cols 0–15: strong rightward flow
 	set_flow_rect(2, 0, 3, 15, 2.0, 0.0)
@@ -344,6 +363,7 @@ def setup_flow():
 	# Water drifts left into the junction, then drops down.
 	set_flow_rect(1, 16, 1, 22, -1.5, 0.0)   # leftward along the top
 	set_flow_rect(1, 15, 1, 15, -1.5, 1.5)   # at 1,15: left + down
+	set_flow_rect(1, 15, 2, 15, -1.5, 1.5)   # at 1,15: left + down
 	set_flow_rect(2, 15, 2, 15, 0.0, 1.5)    # at 2,15: reinforce downward into trunk
 
 	# LITTLE INLET ON (1,7)
@@ -378,4 +398,5 @@ def setup_flow():
 	# BOTTOM-LEFT HORIZONTAL — (row 10, cols 3–4)
 	# Short rightward drift.
 	set_flow_rect(10, 3, 10, 4, 1.0, 0.0)
-	#print(FLOW)
+	print(FLOW)
+	'''
