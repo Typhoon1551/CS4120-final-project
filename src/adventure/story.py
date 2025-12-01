@@ -7,26 +7,326 @@ T_EMPTY: int = 0
 T_WALL: int = 1
 T_ENEMY: int = 2
 
-COLOR_WATER_BG = (18, 28, 38)        
-COLOR_PIPE_WALL = (180, 190, 200)    
-COLOR_PIPE_OUTLINE = (130, 140, 150) 
-COLOR_PORTAL_TILE= (68, 28, 38)    
+COLOR_WATER_BG = (18, 28, 38)
+COLOR_PIPE_WALL = (180, 190, 200)
+COLOR_PIPE_OUTLINE = (130, 140, 150)
+COLOR_PORTAL_TILE = (68, 28, 38)
 
 
 DRAIN_CHAMBER_ROWS = [
-	#0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23
-	[1,1,1,1,1,1,1,1,1,1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], #0
-	[1,1,1,1,1,1,1,0,1,1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1], #1
-	[0,0,0,0,0,0,0,0,0,0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1], #2
-	[0,0,0,0,0,0,0,0,0,0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1], #3
-	[1,1,1,1,1,0,1,1,1,1, 0, 1, 1, 1, 1, 0, 0, 1, 1, 2, 1, 1, 1, 1], #4
-	[1,0,0,0,0,0,1,1,1,1, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1], #5
-	[1,0,1,1,1,0,1,1,1,1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0], #6
-	[1,0,1,1,1,0,1,0,0,0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0], #7
-	[1,0,1,0,0,0,1,0,1,1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1], #8
-	[1,0,1,1,1,0,1,0,0,1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1], #9
-	[1,0,1,2,0,0,1,1,2,1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1], #10
-	[1,1,1,1,1,1,1,1,1,1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], #11
+	# 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23
+	[
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+	],  # 0
+	[
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		0,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		1,
+	],  # 1
+	[
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		1,
+		1,
+		1,
+		0,
+		1,
+		1,
+		1,
+		1,
+	],  # 2
+	[
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		1,
+		1,
+		0,
+		1,
+		1,
+		1,
+		1,
+	],  # 3
+	[
+		1,
+		1,
+		1,
+		1,
+		1,
+		0,
+		1,
+		1,
+		1,
+		1,
+		0,
+		1,
+		1,
+		1,
+		1,
+		0,
+		0,
+		1,
+		1,
+		2,
+		1,
+		1,
+		1,
+		1,
+	],  # 4
+	[
+		1,
+		0,
+		0,
+		0,
+		0,
+		0,
+		1,
+		1,
+		1,
+		1,
+		0,
+		1,
+		1,
+		1,
+		1,
+		0,
+		0,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+	],  # 5
+	[
+		1,
+		0,
+		1,
+		1,
+		1,
+		0,
+		1,
+		1,
+		1,
+		1,
+		0,
+		1,
+		0,
+		0,
+		0,
+		1,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+	],  # 6
+	[
+		1,
+		0,
+		1,
+		1,
+		1,
+		0,
+		1,
+		0,
+		0,
+		0,
+		0,
+		1,
+		0,
+		1,
+		0,
+		1,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+	],  # 7
+	[
+		1,
+		0,
+		1,
+		0,
+		0,
+		0,
+		1,
+		0,
+		1,
+		1,
+		0,
+		1,
+		0,
+		1,
+		0,
+		1,
+		1,
+		1,
+		0,
+		1,
+		1,
+		1,
+		0,
+		1,
+	],  # 8
+	[
+		1,
+		0,
+		1,
+		1,
+		1,
+		0,
+		1,
+		0,
+		0,
+		1,
+		0,
+		1,
+		0,
+		1,
+		0,
+		0,
+		0,
+		1,
+		0,
+		1,
+		0,
+		1,
+		0,
+		1,
+	],  # 9
+	[
+		1,
+		0,
+		1,
+		2,
+		0,
+		0,
+		1,
+		1,
+		2,
+		1,
+		0,
+		1,
+		0,
+		1,
+		1,
+		1,
+		0,
+		0,
+		0,
+		1,
+		0,
+		0,
+		0,
+		1,
+	],  # 10
+	[
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+	],  # 11
 ]
 
 MAP_H_TILES = len(DRAIN_CHAMBER_ROWS)
@@ -47,10 +347,12 @@ for r in range(MAP_H_TILES):
 			r == 0 or r == MAP_H_TILES - 1 or c == 0 or c == MAP_W_TILES - 1
 		):
 			PORTAL_TILES.append((r, c))
-#print(PORTAL_TILES)
+# print(PORTAL_TILES)
 
 
-def random_portal(exclude_idx: int | None = None,) -> tuple[int, tuple[int, int]]:
+def random_portal(
+	exclude_idx: int | None = None,
+) -> tuple[int, tuple[int, int]]:
 	idxs = list(range(len(PORTAL_TILES)))
 	if exclude_idx is not None and exclude_idx in idxs and len(idxs) > 1:
 		idxs.remove(exclude_idx)
@@ -110,7 +412,8 @@ def rect_collides_walls(rect: Rect) -> bool:
 					return True
 	return False
 
-def is_enemey(rect:Rect) -> bool:
+
+def is_enemey(rect: Rect) -> bool:
 	left_tile = max(0, rect.left // TILE_SIZE)
 	right_tile = min(MAP_W_TILES - 1, max(0, (rect.right - 1) // TILE_SIZE))
 	top_tile = max(0, rect.top // TILE_SIZE)
@@ -173,17 +476,18 @@ def get_camera_offset(
 
 
 def draw_drain_chamber(
-	surface: pygame.Surface, cam_off: Tuple[int, int]) -> None:
+	surface: pygame.Surface, cam_off: Tuple[int, int]
+) -> None:
 	cam_x, cam_y = cam_off
 	sw, sh = surface.get_size()
 
 	surface.fill(COLOR_WATER_BG)
 
 	first_col = max(0, cam_x // TILE_SIZE)
-	last_col  = min(MAP_W_TILES, (cam_x + sw) // TILE_SIZE + 1)
+	last_col = min(MAP_W_TILES, (cam_x + sw) // TILE_SIZE + 1)
 	first_row = max(0, cam_y // TILE_SIZE)
-	last_row  = min(MAP_H_TILES, (cam_y + sh) // TILE_SIZE + 1)
-	y_n=random.randint(0,1)
+	last_row = min(MAP_H_TILES, (cam_y + sh) // TILE_SIZE + 1)
+	y_n = random.randint(0, 1)
 	for r in range(first_row, last_row):
 		for c in range(first_col, last_col):
 			if DRAIN_CHAMBER_ROWS[r][c] == T_WALL:
@@ -196,8 +500,8 @@ def draw_drain_chamber(
 				rx = c * TILE_SIZE - cam_x
 				ry = r * TILE_SIZE - cam_y
 				rect = Rect(rx, ry, TILE_SIZE, TILE_SIZE)
-				pygame.draw.rect(surface, (0,0,0), rect)
-			if (r,c) in PORTAL_TILES:
+				pygame.draw.rect(surface, (0, 0, 0), rect)
+			if (r, c) in PORTAL_TILES:
 				rx = c * TILE_SIZE - cam_x
 				ry = r * TILE_SIZE - cam_y
 				rect = Rect(rx, ry, TILE_SIZE, TILE_SIZE)
@@ -206,7 +510,7 @@ def draw_drain_chamber(
 				else:
 					pygame.draw.rect(surface, COLOR_WATER_BG, rect)
 
-		   
+
 def get_safe_start_rect(width: int = 40, height: int = 24) -> Rect:
 	spawn_r, spawn_c = 5, 2
 	if DRAIN_CHAMBER_ROWS[spawn_r][spawn_c] != T_EMPTY:
@@ -317,6 +621,7 @@ FLOW: dict[tuple[int, int], tuple[float, float]] = {
 def clear_flow():
 	FLOW.clear()
 
+
 def set_flow_tile(r, c, fx, fy):
 	if 0 <= r < MAP_H_TILES and 0 <= c < MAP_W_TILES:
 		if DRAIN_CHAMBER_ROWS[r][c] == T_EMPTY:
@@ -325,6 +630,7 @@ def set_flow_tile(r, c, fx, fy):
 				FLOW[(r, c)] = (old[0] + fx, old[1] + fy)
 			else:
 				FLOW[(r, c)] = (fx, fy)
+
 
 def set_flow_rect(r0, c0, r1, c1, fx, fy):
 	r0, r1 = sorted((max(0, r0), min(MAP_H_TILES - 1, r1)))
@@ -338,10 +644,12 @@ def set_flow_rect(r0, c0, r1, c1, fx, fy):
 				else:
 					FLOW[(rr, cc)] = (fx, fy)
 
+
 def flow_at(x, y):
 	r = max(0, min(MAP_H_TILES - 1, y // TILE_SIZE))
 	c = max(0, min(MAP_W_TILES - 1, x // TILE_SIZE))
 	return FLOW.get((r, c), (0.0, 0.0))
+
 
 def setup_flow():
 	'''
