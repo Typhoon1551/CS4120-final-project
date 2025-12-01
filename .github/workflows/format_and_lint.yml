@@ -34,4 +34,4 @@ jobs:
         run: ruff format .
       - uses: stefanzweifel/git-auto-commit-action@v7
         with:
-          commit-message: Format previous commit
+          commit_message: Format previous commit
