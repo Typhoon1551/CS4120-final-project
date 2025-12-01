@@ -9,23 +9,323 @@ T_WALL: int = 1
 COLOR_WATER_BG = (18, 28, 38)
 COLOR_PIPE_WALL = (180, 190, 200)
 COLOR_PIPE_OUTLINE = (130, 140, 150)
-COLOR_PORTAL_TILE= (68, 28, 38)    
+COLOR_PORTAL_TILE = (68, 28, 38)
 
 
 DRAIN_CHAMBER_ROWS = [
-    #0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23
-    [1,1,1,1,1,1,1,1,1,1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], #0
-    [1,1,1,1,1,1,1,0,1,1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1], #1
-    [0,0,0,0,0,0,0,0,0,0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1], #2
-    [0,0,0,0,0,0,0,0,0,0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1], #3
-    [1,1,1,1,1,0,1,1,1,1, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 1, 1, 1, 1], #4
-    [1,0,0,0,0,0,1,1,1,1, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1], #5
-    [1,0,1,1,1,0,1,1,1,1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0], #6
-    [1,0,1,1,1,0,1,0,0,0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0], #7
-    [1,0,1,0,0,0,1,0,1,1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1], #8
-    [1,0,1,1,1,0,1,0,0,1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1], #9
-    [1,0,1,0,0,0,1,1,0,1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1], #10
-    [1,1,1,1,1,1,1,1,1,1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], #11
+	# 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23
+	[
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+	],  # 0
+	[
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		0,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		1,
+	],  # 1
+	[
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		1,
+		1,
+		1,
+		0,
+		1,
+		1,
+		1,
+		1,
+	],  # 2
+	[
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		1,
+		1,
+		0,
+		1,
+		1,
+		1,
+		1,
+	],  # 3
+	[
+		1,
+		1,
+		1,
+		1,
+		1,
+		0,
+		1,
+		1,
+		1,
+		1,
+		0,
+		1,
+		1,
+		1,
+		1,
+		0,
+		0,
+		1,
+		1,
+		0,
+		1,
+		1,
+		1,
+		1,
+	],  # 4
+	[
+		1,
+		0,
+		0,
+		0,
+		0,
+		0,
+		1,
+		1,
+		1,
+		1,
+		0,
+		1,
+		1,
+		1,
+		1,
+		0,
+		0,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+	],  # 5
+	[
+		1,
+		0,
+		1,
+		1,
+		1,
+		0,
+		1,
+		1,
+		1,
+		1,
+		0,
+		1,
+		0,
+		0,
+		0,
+		1,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+	],  # 6
+	[
+		1,
+		0,
+		1,
+		1,
+		1,
+		0,
+		1,
+		0,
+		0,
+		0,
+		0,
+		1,
+		0,
+		1,
+		0,
+		1,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+	],  # 7
+	[
+		1,
+		0,
+		1,
+		0,
+		0,
+		0,
+		1,
+		0,
+		1,
+		1,
+		0,
+		1,
+		0,
+		1,
+		0,
+		1,
+		1,
+		1,
+		0,
+		1,
+		1,
+		1,
+		0,
+		1,
+	],  # 8
+	[
+		1,
+		0,
+		1,
+		1,
+		1,
+		0,
+		1,
+		0,
+		0,
+		1,
+		0,
+		1,
+		0,
+		1,
+		0,
+		0,
+		0,
+		1,
+		0,
+		1,
+		0,
+		1,
+		0,
+		1,
+	],  # 9
+	[
+		1,
+		0,
+		1,
+		0,
+		0,
+		0,
+		1,
+		1,
+		0,
+		1,
+		0,
+		1,
+		0,
+		1,
+		1,
+		1,
+		0,
+		0,
+		0,
+		1,
+		0,
+		0,
+		0,
+		1,
+	],  # 10
+	[
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+	],  # 11
 ]
 
 MAP_H_TILES = len(DRAIN_CHAMBER_ROWS)
@@ -36,11 +336,11 @@ MAP_H_PX = MAP_H_TILES * TILE_SIZE
 
 PORTAL_TILES: List[Tuple[int, int]] = []
 for r in range(MAP_H_TILES):
-    for c in range(MAP_W_TILES):
-        if DRAIN_CHAMBER_ROWS[r][c] == T_EMPTY and (
-            r == 0 or r == MAP_H_TILES - 1 or c == 0 or c == MAP_W_TILES - 1
-        ):
-            PORTAL_TILES.append((r, c))
+	for c in range(MAP_W_TILES):
+		if DRAIN_CHAMBER_ROWS[r][c] == T_EMPTY and (
+			r == 0 or r == MAP_H_TILES - 1 or c == 0 or c == MAP_W_TILES - 1
+		):
+			PORTAL_TILES.append((r, c))
 print(PORTAL_TILES)
 
 
@@ -118,32 +418,39 @@ def try_move(rect: Rect, dx: int, dy: int) -> Rect:
 	rect.top = max(0, min(rect.top, MAP_H_PX - rect.height))
 	return rect
 
-def get_camera_offset(player_rect: Rect, screen_w: int, screen_h: int) -> Tuple[int, int]:
-    cam_x = player_rect.centerx - screen_w // 2
-    cam_y = player_rect.centery - screen_h // 2
-    cam_x = max(0, min(cam_x, max(0, MAP_W_PX - screen_w)))
-    cam_y = max(0, min(cam_y, max(0, MAP_H_PX - screen_h)))
-    return cam_x, cam_y
 
-def draw_drain_chamber(surface: pygame.Surface, cam_off: Tuple[int, int]) -> None:
-    cam_x, cam_y = cam_off
-    sw, sh = surface.get_size()
+def get_camera_offset(
+	player_rect: Rect, screen_w: int, screen_h: int
+) -> Tuple[int, int]:
+	cam_x = player_rect.centerx - screen_w // 2
+	cam_y = player_rect.centery - screen_h // 2
+	cam_x = max(0, min(cam_x, max(0, MAP_W_PX - screen_w)))
+	cam_y = max(0, min(cam_y, max(0, MAP_H_PX - screen_h)))
+	return cam_x, cam_y
 
-    surface.fill(COLOR_WATER_BG)
 
-    first_col = max(0, cam_x // TILE_SIZE)
-    last_col  = min(MAP_W_TILES, (cam_x + sw) // TILE_SIZE + 1)
-    first_row = max(0, cam_y // TILE_SIZE)
-    last_row  = min(MAP_H_TILES, (cam_y + sh) // TILE_SIZE + 1)
-    y_n=random.randint(0,1)
-    for r in range(first_row, last_row):
-        for c in range(first_col, last_col):
-            if DRAIN_CHAMBER_ROWS[r][c] == T_WALL:
-                rx = c * TILE_SIZE - cam_x
-                ry = r * TILE_SIZE - cam_y
-                rect = Rect(rx, ry, TILE_SIZE, TILE_SIZE)
-                pygame.draw.rect(surface, COLOR_PIPE_WALL, rect)
-                pygame.draw.rect(surface, COLOR_PIPE_OUTLINE, rect, width=2)
+def draw_drain_chamber(
+	surface: pygame.Surface, cam_off: Tuple[int, int]
+) -> None:
+	cam_x, cam_y = cam_off
+	sw, sh = surface.get_size()
+
+	surface.fill(COLOR_WATER_BG)
+
+	first_col = max(0, cam_x // TILE_SIZE)
+	last_col = min(MAP_W_TILES, (cam_x + sw) // TILE_SIZE + 1)
+	first_row = max(0, cam_y // TILE_SIZE)
+	last_row = min(MAP_H_TILES, (cam_y + sh) // TILE_SIZE + 1)
+	y_n = random.randint(0, 1)
+	for r in range(first_row, last_row):
+		for c in range(first_col, last_col):
+			if DRAIN_CHAMBER_ROWS[r][c] == T_WALL:
+				rx = c * TILE_SIZE - cam_x
+				ry = r * TILE_SIZE - cam_y
+				rect = Rect(rx, ry, TILE_SIZE, TILE_SIZE)
+				pygame.draw.rect(surface, COLOR_PIPE_WALL, rect)
+				pygame.draw.rect(surface, COLOR_PIPE_OUTLINE, rect, width=2)
+
 
 def get_safe_start_rect(width: int = 40, height: int = 24) -> Rect:
 	spawn_r, spawn_c = 5, 2
