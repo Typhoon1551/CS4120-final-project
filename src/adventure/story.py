@@ -104,12 +104,12 @@ def try_move(rect: Rect, dx: int, dy: int) -> Rect:
     if not rect_collides_walls(r):
         rect = r
     else:
-        rect = try_move(rect,dx*(-16),(dy+zero)*(5))
+        rect = try_move(rect,dx*(-10),(dy+zero)*(4))
     r = rect.move(0, dy)
     if not rect_collides_walls(r):
         rect = r
     else:
-        rect = try_move(rect,(dx+zero)*(5),dy*(-16))
+        rect = try_move(rect,(dx+zero)*(4),dy*(-10))
 
     rect.left = max(0, min(rect.left, MAP_W_PX - rect.width))
     rect.top  = max(0, min(rect.top,  MAP_H_PX - rect.height))
