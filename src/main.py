@@ -111,7 +111,9 @@ def hit1(current_health, health_message):
 def main():
 	pygame.init()
 	display_size = pygame.display.Info()
-	display = pygame.display.set_mode((display_size.current_w, display_size.current_h),pygame.RESIZABLE)
+	display = pygame.display.set_mode(
+		(display_size.current_w, display_size.current_h), pygame.RESIZABLE
+	)
 	story.setup_flow()
 	tilesw = 3
 	tilesh = 3
@@ -141,7 +143,7 @@ def main():
 	health_message = 0
 
 	clock = pygame.time.Clock()
-	time1=time.time()
+	time1 = time.time()
 
 	### Player/Enemy Initialization ###
 	player = character.Character(
@@ -252,8 +254,17 @@ def main():
 
 		pygame.transform.scale(render_surf, display.get_size(), display)
 
-		now=time.time()
-		none=message(100,[f"Health: {player.current_health}",f"Time: {str(int(now-time1))}"], display,20,20)
+		now = time.time()
+		none = message(
+			100,
+			[
+				f'Health: {player.current_health}',
+				f'Time: {str(int(now - time1))}',
+			],
+			display,
+			20,
+			20,
+		)
 
 		if ((phys_rect.centerx - old.centerx) != mdx) or (
 			(phys_rect.centery - old.centery) != mdy
@@ -282,26 +293,23 @@ def main():
 			player.current_health = 500
 
 		if story.is_enemey(phys_rect):
-			none=combat_main(display, player, enemy1)
+			none = combat_main(display, player, enemy1)
 			story.remove_enemy(phys_rect)
-			end=story.is_enemey(phys_rect)
+			end = story.is_enemey(phys_rect)
 			print(end)
 			while end:
-				mdx=(mdx+random.randint(-1,1))*-1
-				mdy=(mdy+random.randint(-1,1))*-1
-				phys_rect=story.try_move(phys_rect,(mdx),(mdy))
-				end=story.is_enemey(phys_rect)
+				mdx = (mdx + random.randint(-1, 1)) * -1
+				mdy = (mdy + random.randint(-1, 1)) * -1
+				phys_rect = story.try_move(phys_rect, (mdx), (mdy))
+				end = story.is_enemey(phys_rect)
 				if not end:
-					mdx=dx + int(round(fx))*4
-					mdy = dy + int(round(fy))*4
-					phys_rect=story.try_move(phys_rect,(mdx),(mdy))
-					end=story.is_enemey(phys_rect)
-					print (end)
-
-
+					mdx = dx + int(round(fx)) * 4
+					mdy = dy + int(round(fy)) * 4
+					phys_rect = story.try_move(phys_rect, (mdx), (mdy))
+					end = story.is_enemey(phys_rect)
+					print(end)
 
 			print(end)
-			
 
 		for event in pygame.event.get():
 			if event.type == pygame.locals.QUIT:

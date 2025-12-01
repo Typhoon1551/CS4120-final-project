@@ -18,7 +18,6 @@ def combat_main(display: pygame.Surface, player: Character, enemy: Character):
 	running = True
 	clock = pygame.time.Clock()
 
-
 	### Combat initialization ###
 	for item in player.inventory:
 		if not item.active:
@@ -87,17 +86,15 @@ def combat_main(display: pygame.Surface, player: Character, enemy: Character):
 
 	### main loop ###
 	while running:
-
 		display.blit(background, (0, 0))
-		
+
 		### Exit Button ###
-		if exit_button.pressed()==True:
+		if exit_button.pressed() == True:
 			print(exit_button.pressed())
 			running = False
 			return running
 			break
 			continue
-		
 
 		### Inventory ###
 		inventory_buttons = []
@@ -148,11 +145,9 @@ def combat_main(display: pygame.Surface, player: Character, enemy: Character):
 		### Event Handling ###
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
-				result="quit"
+				result = 'quit'
 				running = False
 
 		clock.tick(common.FPS)
 
 		pygame.display.update()
-		
-
