@@ -41,7 +41,6 @@ for r in range(MAP_H_TILES):
 			r == 0 or r == MAP_H_TILES - 1 or c == 0 or c == MAP_W_TILES - 1
 		):
 			PORTAL_TILES.append((r, c))
-	print(PORTAL_TILES)
 	for c in range(MAP_W_TILES):
 		if DRAIN_CHAMBER_ROWS[r][c] == T_EMPTY and (
 			r == 0 or r == MAP_H_TILES - 1 or c == 0 or c == MAP_W_TILES - 1
@@ -118,9 +117,9 @@ def try_move(rect: Rect, dx: int, dy: int) -> Rect:
 		rect = r
 	else:
 		rect = try_move(rect,dx*(-10),(dy+zero)*(4))
-	r = rect.move(0, dy)
-	if not rect_collides_walls(r):
-		rect = r
+	r1 = rect.move(0, dy)
+	if not rect_collides_walls(r1):
+		rect = r1
 	else:
 		rect = try_move(rect,(dx+zero)*(4),dy*(-10))
 
