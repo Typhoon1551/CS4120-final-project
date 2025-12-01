@@ -5,6 +5,7 @@ from typing import List, Tuple
 TILE_SIZE: int = 64
 T_EMPTY: int = 0
 T_WALL: int = 1
+T_ENEMY: int = 2
 
 COLOR_WATER_BG = (18, 28, 38)        
 COLOR_PIPE_WALL = (180, 190, 200)    
@@ -18,13 +19,13 @@ DRAIN_CHAMBER_ROWS = [
 	[1,1,1,1,1,1,1,0,1,1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1], #1
 	[0,0,0,0,0,0,0,0,0,0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1], #2
 	[0,0,0,0,0,0,0,0,0,0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1], #3
-	[1,1,1,1,1,0,1,1,1,1, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 1, 1, 1, 1], #4
+	[1,1,1,1,1,0,1,1,1,1, 0, 1, 1, 1, 1, 0, 0, 1, 1, 2, 1, 1, 1, 1], #4
 	[1,0,0,0,0,0,1,1,1,1, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1], #5
 	[1,0,1,1,1,0,1,1,1,1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0], #6
 	[1,0,1,1,1,0,1,0,0,0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0], #7
 	[1,0,1,0,0,0,1,0,1,1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1], #8
 	[1,0,1,1,1,0,1,0,0,1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1], #9
-	[1,0,1,0,0,0,1,1,0,1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1], #10
+	[1,0,1,2,0,0,1,1,2,1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1], #10
 	[1,1,1,1,1,1,1,1,1,1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], #11
 ]
 
@@ -109,6 +110,20 @@ def rect_collides_walls(rect: Rect) -> bool:
 					return True
 	return False
 
+def is_enemey(rect:Rect) -> bool:
+	left_tile = max(0, rect.left // TILE_SIZE)
+	right_tile = min(MAP_W_TILES - 1, max(0, (rect.right - 1) // TILE_SIZE))
+	top_tile = max(0, rect.top // TILE_SIZE)
+	bottom_tile = min(MAP_H_TILES - 1, max(0, (rect.bottom - 1) // TILE_SIZE))
+	for r in range(top_tile, bottom_tile + 1):
+		for c in range(left_tile, right_tile + 1):
+			if DRAIN_CHAMBER_ROWS[r][c] == T_ENEMY:
+				tile_rect = Rect(
+					c * TILE_SIZE, r * TILE_SIZE, TILE_SIZE, TILE_SIZE
+				)
+				if rect.colliderect(tile_rect):
+					return True
+	return False
 
 def try_move(rect: Rect, dx: int, dy: int) -> Rect:
 	zero=random.randint(-1,1)
@@ -116,12 +131,12 @@ def try_move(rect: Rect, dx: int, dy: int) -> Rect:
 	if not rect_collides_walls(r):
 		rect = r
 	else:
-		rect = try_move(rect,dx*(-10),(dy+zero)*(4))
+		rect = try_move(rect,dx*(-5),(dy+zero)*(4))
 	r1 = rect.move(0, dy)
 	if not rect_collides_walls(r1):
 		rect = r1
 	else:
-		rect = try_move(rect,(dx+zero)*(4),dy*(-10))
+		rect = try_move(rect,(dx+zero)*(4),dy*(-5))
 
 	rect.left = max(0, min(rect.left, MAP_W_PX - rect.width))
 	rect.top  = max(0, min(rect.top,  MAP_H_PX - rect.height))
@@ -158,7 +173,11 @@ def draw_drain_chamber(
 				rect = Rect(rx, ry, TILE_SIZE, TILE_SIZE)
 				pygame.draw.rect(surface, COLOR_PIPE_WALL, rect)
 				pygame.draw.rect(surface, COLOR_PIPE_OUTLINE, rect, width=2)
-
+			if DRAIN_CHAMBER_ROWS[r][c] == T_ENEMY:
+				rx = c * TILE_SIZE - cam_x
+				ry = r * TILE_SIZE - cam_y
+				rect = Rect(rx, ry, TILE_SIZE, TILE_SIZE)
+				pygame.draw.rect(surface, (0,0,0), rect)
 			if (r,c) in PORTAL_TILES:
 				rx = c * TILE_SIZE - cam_x
 				ry = r * TILE_SIZE - cam_y

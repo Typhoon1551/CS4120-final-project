@@ -2,7 +2,7 @@
 import pygame
 import pygame.locals
 import sys
-
+import random
 # internal imports
 import items
 import character
@@ -10,6 +10,19 @@ from combat.main import combat_main
 from adventure import story
 import common
 
+def message(_help_ticks, message,display,y,x,size=28):
+	if _help_ticks > 0:
+			
+			overlay = pygame.Surface(display.get_size(), pygame.SRCALPHA)
+			font = pygame.font.SysFont(None, size)
+			lines = message
+			for ln in lines:
+				txt = font.render(ln, True, (235, 245, 255))
+				overlay.blit(txt, (x, y))
+				y += 32
+			display.blit(overlay, (0, 0))
+			_help_ticks -= 1
+	return _help_ticks
 
 def draw_player(characterbuild, display):
 	left = int(characterbuild['left'])
@@ -85,13 +98,11 @@ def draw_player(characterbuild, display):
 		display, (225, 0, 225), (int(eye[0]), int(eye[1])), int(width * 0.1)
 	)
 
+def hit1(current_health,health_message):
+	current_health-=random.randint(1,5)
+	health_message=10
+	return [current_health,health_message]
 
-def main():
-	pygame.init()
-	display_size = pygame.display.Info()
-	display = pygame.display.set_mode(
-		(display_size.current_w-10, display_size.current_h-100)
-	)
 def main():
 	pygame.init()
 	display_size = pygame.display.Info()
@@ -124,12 +135,13 @@ def main():
 	_hud_font = pygame.font.SysFont(None, 22)
 	_help_ticks = 500
 	_hit_cooldown = 0
+	health_message=0
 
 	clock = pygame.time.Clock()
 
 	### Player/Enemy Initialization ###
 	player = character.Character(
-		100,
+		500,
 		[
 			items.health_potion(25),
 			items.health_potion(50),
@@ -191,11 +203,15 @@ def main():
 				phys_rect = test
 			vis_rect.center = phys_rect.center
 			cd['left'], cd['top'] = vis_rect.left, vis_rect.top
+		
+		old=phys_rect
 
 		if mdx or mdy:
 			phys_rect = story.try_move(phys_rect, mdx, mdy)
 			vis_rect.center = phys_rect.center
 			cd['left'], cd['top'] = vis_rect.left, vis_rect.top
+
+
 		if mdx or mdy:
 			if abs(mdx) >= abs(mdy):
 				cd['facing'] = 'R' if mdx > 0 else 'L'
@@ -209,7 +225,7 @@ def main():
 			vis_rect.center = dest
 			cd['left'], cd['top'] = vis_rect.left, vis_rect.top
 		cam_off = story.get_camera_offset(phys_rect, veiw_w, veiwh)
-
+		
 		story.draw_drain_chamber(render_surf, cam_off)
 		story.update_and_draw_debris(render_surf, cam_off)
 
@@ -220,11 +236,9 @@ def main():
 		for d in story.DEBRIS:
 			if phys_rect.colliderect(d.rect):
 				if _hit_cooldown == 0:
-					if getattr(character.Character, 'current_health', 0) <= 0:
-						character.Character.current_health = 10
-					character.Character.current_health = max(
-						0, character.Character.current_health - 1
-					)
+					hit=hit1(player.current_health,health_message)
+					player.current_health=hit[0]
+					health_message=hit[1]
 					phys_rect = story.try_move(
 						phys_rect, -4 if mdx >= 0 else 4, -4 if mdy >= 0 else 4
 					)
@@ -235,27 +249,32 @@ def main():
 
 		pygame.transform.scale(render_surf, display.get_size(), display)
 
-		if _help_ticks > 0:
-			if any(key[i] for i in range(len(key))):
-				_help_ticks = 0
-			else:
-				overlay = pygame.Surface(display.get_size(), pygame.SRCALPHA)
-				overlay.fill((0, 0, 0, 90))
-				font = pygame.font.SysFont(None, 28)
-				lines = [
+
+		none=message(100,[f"Health: {player.current_health}",str(clock)], display,20,20)
+
+		if ((phys_rect.centerx-old.centerx)!=mdx) or ((phys_rect.centery-old.centery)!=mdy):
+			hit=hit1(player.current_health,health_message)
+			player.current_health=hit[0]
+			health_message=hit[1]
+		
+		health_message=message(health_message,["-1"],display,20,100,100)
+		message1=[
 					'WASD / Arrows to swim',
 					'Portals: push into a hole on the outer wall',
-					'Debris = small damage (has cooldown)',
+					'Debris = small damage',
+					"Don't hit the walls, it will hurt.",
+					"Find your enemies and destroy them",
+					"You have these items:",
 				]
-				y = 20
-				for ln in lines:
-					txt = font.render(ln, True, (235, 245, 255))
-					overlay.blit(txt, (20, y))
-					y += 32
-				display.blit(overlay, (0, 0))
-				_help_ticks -= 1
+		for x in list(player.inventory):
+			message1.append(str(x.description))
+		
+		_help_ticks=message(_help_ticks,message1,display,20,display_size.current_w-500)
+		
+		if _help_ticks >300:
+			player.current_health=500
 
-		if key[pygame.K_SPACE]:
+		if story.is_enemey(phys_rect):
 			combat_main(display, player, enemy1)
 
 		for event in pygame.event.get():
