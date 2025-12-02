@@ -1,7 +1,7 @@
 import pygame
 import random
 from typing import List, Tuple
-
+#fmt: off
 TILE_SIZE: int = 64
 T_EMPTY: int = 0
 T_WALL: int = 1
@@ -416,3 +416,4 @@ def setup_flow():
 	set_flow_rect(10, 3, 10, 4, 1.0, 0.0)
 	print(FLOW)
 	"""
+#fmt: on
