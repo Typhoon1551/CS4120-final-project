@@ -295,6 +295,17 @@ def main():
 			)
 			index += 1
 			# health_message = message(health_message, ['-1'], display, 20, 100, 300, (225,0,0))
+			health_message[index] = message(
+				health_message[index],
+				['-1'],
+				display,
+				20,
+				100 * (index + 1),
+				200,
+				(225, 0, 0),
+			)
+			index += 1
+			# health_message = message(health_message, ['-1'], display, 20, 100, 300, (225,0,0))
 		message1 = [
 			'WASD / Arrows to swim',
 			'Portals: push into a hole on the outer wall',
