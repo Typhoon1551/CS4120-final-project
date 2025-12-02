@@ -13,13 +13,13 @@ from adventure import story
 import common
 
 
-def message(_help_ticks, message, display, y, x, size=28):
+def message(_help_ticks, message, display, y, x, size=28, color=(235, 245, 255)):
 	if _help_ticks > 0:
 		overlay = pygame.Surface(display.get_size(), pygame.SRCALPHA)
 		font = pygame.font.SysFont(None, size)
 		lines = message
 		for ln in lines:
-			txt = font.render(ln, True, (235, 245, 255))
+			txt = font.render(ln, True, color)
 			overlay.blit(txt, (x, y))
 			y += 32
 		display.blit(overlay, (0, 0))
@@ -104,7 +104,7 @@ def draw_player(characterbuild, display):
 
 def hit1(current_health, health_message):
 	current_health -= random.randint(1, 5)
-	health_message = 10
+	health_message = 20
 	return [current_health, health_message]
 
 
@@ -140,7 +140,7 @@ def main():
 	_hud_font = pygame.font.SysFont(None, 22)
 	_help_ticks = 500
 	_hit_cooldown = 0
-	health_message = 0
+	health_message = []
 
 	clock = pygame.time.Clock()
 	time1 = time.time()
@@ -241,9 +241,9 @@ def main():
 		for d in story.DEBRIS:
 			if phys_rect.colliderect(d.rect):
 				if _hit_cooldown == 0:
-					hit = hit1(player.current_health, health_message)
+					hit = hit1(player.current_health, 10)
 					player.current_health = hit[0]
-					health_message = hit[1]
+					health_message.append(hit[1])
 					phys_rect = story.try_move(
 						phys_rect, -4 if mdx >= 0 else 4, -4 if mdy >= 0 else 4
 					)
@@ -271,9 +271,12 @@ def main():
 		):
 			hit = hit1(player.current_health, health_message)
 			player.current_health = hit[0]
-			health_message = hit[1]
-
-		health_message = message(health_message, ['-1'], display, 20, 100, 100)
+			health_message.append(hit[1])
+		index=0
+		for x in health_message:
+			health_message[index]=message(health_message[index], ["-1"], display, 30, 100*(index+1), 200, (225, 0, 0))
+			index+=1
+			#health_message = message(health_message, ['-1'], display, 20, 100, 300, (225,0,0))
 		message1 = [
 			'WASD / Arrows to swim',
 			'Portals: push into a hole on the outer wall',
@@ -285,10 +288,14 @@ def main():
 		for x in list(player.inventory):
 			message1.append(str(x.description))
 
-		_help_ticks = message(
-			_help_ticks, message1, display, 20, display_size.current_w - 500
-		)
-
+		_help_ticks = message(_help_ticks, message1, display, 500, display_size.current_w - 500)
+		if len(health_message)>0:
+			index=0
+			for x in health_message:
+				health_message[index]-=1
+				if x <=0:
+					health_message.pop(index)
+				index+=1
 		if _help_ticks > 300:
 			player.current_health = 500
 
