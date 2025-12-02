@@ -13,7 +13,9 @@ from adventure import story
 import common
 
 
-def message(_help_ticks, message, display, y, x, size=28, color=(235, 245, 255)):
+def message(
+	_help_ticks, message, display, y, x, size=28, color=(235, 245, 255)
+):
 	if _help_ticks > 0:
 		overlay = pygame.Surface(display.get_size(), pygame.SRCALPHA)
 		font = pygame.font.SysFont(None, size)
@@ -272,11 +274,19 @@ def main():
 			hit = hit1(player.current_health, health_message)
 			player.current_health = hit[0]
 			health_message.append(hit[1])
-		index=0
+		index = 0
 		for x in health_message:
-			health_message[index]=message(health_message[index], ["-1"], display, 30, 100*(index+1), 200, (225, 0, 0))
-			index+=1
-			#health_message = message(health_message, ['-1'], display, 20, 100, 300, (225,0,0))
+			health_message[index] = message(
+				health_message[index],
+				['-1'],
+				display,
+				30,
+				100 * (index + 1),
+				200,
+				(225, 0, 0),
+			)
+			index += 1
+			# health_message = message(health_message, ['-1'], display, 20, 100, 300, (225,0,0))
 		message1 = [
 			'WASD / Arrows to swim',
 			'Portals: push into a hole on the outer wall',
@@ -288,14 +298,16 @@ def main():
 		for x in list(player.inventory):
 			message1.append(str(x.description))
 
-		_help_ticks = message(_help_ticks, message1, display, 500, display_size.current_w - 500)
-		if len(health_message)>0:
-			index=0
+		_help_ticks = message(
+			_help_ticks, message1, display, 500, display_size.current_w - 500
+		)
+		if len(health_message) > 0:
+			index = 0
 			for x in health_message:
-				health_message[index]-=1
-				if x <=0:
+				health_message[index] -= 1
+				if x <= 0:
 					health_message.pop(index)
-				index+=1
+				index += 1
 		if _help_ticks > 300:
 			player.current_health = 500
 
