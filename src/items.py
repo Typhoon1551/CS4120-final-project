@@ -52,3 +52,27 @@ def empty_bottle():
 		None,
 		effect,
 	)
+
+def drain_o():
+	def effect(player: Character, enemy: Character, this: Item):
+		enemy.current_health -= 100
+		player.current_health-= 100
+		player.inventory.remove(this)
+	return Item(
+		True,
+		"Drain-O",
+		"Pour out to deal 100 damage to yourself and enemy",
+		None,
+		effect,
+	)
+
+def basic_wand(level):
+	def e(player: Character, enemy: Character, this: Item):
+		enemy.current_health-=5**level
+	return Item(
+		True,
+		f"Basic Wand, level {level}",
+		f"Wave to deal enemy {5**level} damage",
+		None,
+		e
+	)

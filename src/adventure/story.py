@@ -7,7 +7,7 @@ TILE_SIZE: int = 64
 T_EMPTY: int = 0
 T_WALL: int = 1
 T_ENEMY: int = 2
-
+T_UPGRADE: int=3
 COLOR_WATER_BG = (18, 28, 38)
 COLOR_PIPE_WALL = (180, 190, 200)
 COLOR_PIPE_OUTLINE = (130, 140, 150)
@@ -17,17 +17,17 @@ COLOR_PORTAL_TILE = (68, 28, 38)
 DRAIN_CHAMBER_ROWS = [
 	#0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23
 	[1,1,1,1,1,1,1,1,1,1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], #0
-	[1,1,1,1,1,1,1,0,1,1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1], #1
+	[1,1,1,1,1,1,1,3,1,1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 2, 0, 0, 3, 1], #1
 	[0,0,0,0,0,0,0,0,0,0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1], #2
 	[0,0,0,0,0,0,0,0,0,0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1], #3
-	[1,1,1,1,1,0,1,1,1,1, 0, 1, 1, 1, 1, 0, 0, 1, 1, 2, 1, 1, 1, 1], #4
-	[1,0,0,0,0,0,1,1,1,1, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1], #5
+	[1,1,1,1,1,0,1,1,1,1, 0, 1, 1, 1, 1, 0, 0, 1, 1, 3, 1, 1, 1, 1], #4
+	[1,0,0,0,0,0,1,1,1,1, 0, 1, 1, 3, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1], #5
 	[1,0,1,1,1,0,1,1,1,1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0], #6
-	[1,0,1,1,1,0,1,0,0,0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0], #7
-	[1,0,1,0,0,0,1,0,1,1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1], #8
+	[1,0,1,1,1,2,1,0,0,0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0], #7
+	[1,0,1,0,0,3,1,0,1,1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1], #8
 	[1,0,1,1,1,0,1,0,0,1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1], #9
-	[1,0,1,2,0,0,1,1,2,1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1], #10
-	[1,1,1,1,1,1,1,1,1,1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], #11
+	[1,0,1,3,2,0,1,1,2,1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1], #10
+	[1,1,1,1,1,1,1,1,1,1, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], #11
 ]
 
 MAP_H_TILES = len(DRAIN_CHAMBER_ROWS)
@@ -113,6 +113,35 @@ def rect_collides_walls(rect: Rect) -> bool:
 					return True
 	return False
 
+def is_upgrade(rect: Rect) -> bool:
+	left_tile = max(0, rect.left // TILE_SIZE)
+	right_tile = min(MAP_W_TILES - 1, max(0, (rect.right - 1) // TILE_SIZE))
+	top_tile = max(0, rect.top // TILE_SIZE)
+	bottom_tile = min(MAP_H_TILES - 1, max(0, (rect.bottom - 1) // TILE_SIZE))
+	for r in range(top_tile, bottom_tile + 1):
+		for c in range(left_tile, right_tile + 1):
+			if DRAIN_CHAMBER_ROWS[r][c] == T_UPGRADE:
+				tile_rect = Rect(
+					c * TILE_SIZE, r * TILE_SIZE, TILE_SIZE, TILE_SIZE
+				)
+				if rect.colliderect(tile_rect):
+					return True
+	return False
+
+
+def remove_upgrade(rect: Rect) -> bool:
+	left_tile = max(0, rect.left // TILE_SIZE)
+	right_tile = min(MAP_W_TILES - 1, max(0, (rect.right - 1) // TILE_SIZE))
+	top_tile = max(0, rect.top // TILE_SIZE)
+	bottom_tile = min(MAP_H_TILES - 1, max(0, (rect.bottom - 1) // TILE_SIZE))
+	for r in range(top_tile, bottom_tile + 1):
+		for c in range(left_tile, right_tile + 1):
+			if DRAIN_CHAMBER_ROWS[r][c] == T_UPGRADE:
+				tile_rect = Rect(
+					c * TILE_SIZE, r * TILE_SIZE, TILE_SIZE, TILE_SIZE
+				)
+				if rect.colliderect(tile_rect):
+					DRAIN_CHAMBER_ROWS[r][c] = T_EMPTY
 
 def is_enemey(rect: Rect) -> bool:
 	left_tile = max(0, rect.left // TILE_SIZE)
@@ -146,8 +175,6 @@ def remove_enemy(rect: Rect) -> bool:
 
 
 R = 0
-
-
 def try_move(rect: Rect, dx: int, dy: int):
 	try:
 		R += 1

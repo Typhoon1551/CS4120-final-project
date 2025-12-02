@@ -90,7 +90,6 @@ def combat_main(display: pygame.Surface, player: Character, enemy: Character):
 
 		### Exit Button ###
 		if exit_button.pressed() == True:
-			print(exit_button.pressed())
 			running = False
 			return running
 			break

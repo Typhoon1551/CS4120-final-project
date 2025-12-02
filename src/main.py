@@ -112,6 +112,8 @@ def hit1(current_health, health_message):
 	return [current_health, health_message]
 
 
+
+
 def main():
 	pygame.init()
 	display_size = pygame.display.Info()
@@ -148,7 +150,7 @@ def main():
 
 	clock = pygame.time.Clock()
 	time1 = time.time()
-
+	level=1
 	### Player/Enemy Initialization ###
 	player = character.Character(
 		500,
@@ -156,6 +158,8 @@ def main():
 			items.health_potion(25),
 			items.health_potion(50),
 			items.health_potion(75),
+			items.basic_wand(level),
+
 		],
 		'John Fish',
 		'A cute little guppy',
@@ -180,159 +184,223 @@ def main():
 
 	### Main Loop ###
 	while True:
-		key = pygame.key.get_pressed()
-		dx = dy = 0
-		speed = 6
-		if key[pygame.K_UP] or key[pygame.K_w]:
-			dy -= speed
-		if key[pygame.K_DOWN] or key[pygame.K_s]:
-			dy += speed
-		if key[pygame.K_LEFT] or key[pygame.K_a]:
-			dx -= speed
-		if key[pygame.K_RIGHT] or key[pygame.K_d]:
-			dx += speed
-		if _hit_cooldown > 0:
-			_hit_cooldown -= 1
+		
+		c=(225, 225, 225)
+		if player.current_health<=0:
+			overlay = pygame.Surface(display.get_size(), pygame.SRCALPHA)
+			font = pygame.font.SysFont(None, 500)
+			lines = "YOU LOST"
+			txt = font.render(lines, True, color=c)
+			overlay.blit(txt, (20, display_size.current_h//4))
+			display.blit(overlay, (15, 0))
+			exit_button = ui.Button(
+				(40, display_size.current_h - 200),
+				(100, 50),
+				'EXIT',
+				color=(255, 255, 255),
+				hovered_color=(255, 0, 0),
+				padding=10,
+			)
+			while True:
+				if exit_button.pressed() == True:
+					pygame.quit()
+					sys.exit()
+					break
+				for event in pygame.event.get():
+					if event.type == pygame.locals.QUIT:
+						pygame.quit()
+						sys.exit()
 
-		cd = player.character_design
-		vis_rect = pygame.Rect(
-			int(cd['left']),
-			int(cd['top']),
-			int(cd['width']),
-			int(cd['height']),
-		)
-		phys_rect = vis_rect.inflate(
-			-int(vis_rect.width * 0.30), -int(vis_rect.height * 0.20)
-		)
-		phys_rect.center = vis_rect.center
+				exit_button.render(display)
+				pygame.display.update()
 
-		fx, fy = story.flow_at(phys_rect.centerx, phys_rect.centery)
-		mdx = dx + int(round(fx))
-		mdy = dy + int(round(fy))
+			break
 
-		if mdx == 0 and mdy == 0 and (fx or fy):
-			nudge_x = 1 if fx > 0 else -1 if fx < 0 else 0
-			nudge_y = 1 if fy > 0 else -1 if fy < 0 else 0
-			test = phys_rect.move(nudge_x, 0)
-			if not story.rect_collides_walls(test):
-				phys_rect = test
-			test = phys_rect.move(0, nudge_y)
-			if not story.rect_collides_walls(test):
-				phys_rect = test
-			vis_rect.center = phys_rect.center
-			cd['left'], cd['top'] = vis_rect.left, vis_rect.top
+		elif enemy1.current_health<=0:
+			overlay = pygame.Surface(display.get_size(), pygame.SRCALPHA)
+			font = pygame.font.SysFont(None, 500)
+			lines = "YOU WON"
+			txt = font.render(lines, True, color=c)
+			overlay.blit(txt, (20, display_size.current_h//4))
+			display.blit(overlay, (15, 0))
+			exit_button = ui.Button(
+				(20, display_size.current_h - 200),
+				(100, 50),
+				'EXIT',
+				color=(255, 255, 255),
+				hovered_color=(255, 0, 0),
+				padding=10,
+			)
+			while True:
+				if exit_button.pressed() == True:
+					pygame.quit()
+					sys.exit()
+					break
+				for event in pygame.event.get():
+					if event.type == pygame.locals.QUIT:
+						pygame.quit()
+						sys.exit()
+				exit_button.render(display)
 
-		old = phys_rect
+				pygame.display.update()
+			break
 
-		if mdx or mdy:
-			phys_rect = story.try_move(phys_rect, mdx, mdy)
-			vis_rect.center = phys_rect.center
-			cd['left'], cd['top'] = vis_rect.left, vis_rect.top
-
-		if mdx or mdy:
-			if abs(mdx) >= abs(mdy):
-				cd['facing'] = 'R' if mdx > 0 else 'L'
-			else:
-				cd['facing'] = 'D' if mdy > 0 else 'U'
+		
 		else:
-			cd.setdefault('facing', 'R')
-		dest = story.maybe_trigger_portal(phys_rect, (mdx, mdy))
-		if dest is not None:
-			phys_rect.center = dest
-			vis_rect.center = dest
-			cd['left'], cd['top'] = vis_rect.left, vis_rect.top
-		cam_off = story.get_camera_offset(phys_rect, veiw_w, veiwh)
+			key = pygame.key.get_pressed()
+			dx = dy = 0
+			speed = 6
+			if key[pygame.K_UP] or key[pygame.K_w]:
+				dy -= speed
+			if key[pygame.K_DOWN] or key[pygame.K_s]:
+				dy += speed
+			if key[pygame.K_LEFT] or key[pygame.K_a]:
+				dx -= speed
+			if key[pygame.K_RIGHT] or key[pygame.K_d]:
+				dx += speed
+			if _hit_cooldown > 0:
+				_hit_cooldown -= 1
 
-		story.draw_drain_chamber(render_surf, cam_off)
-		story.update_and_draw_debris(render_surf, cam_off)
+			cd = player.character_design
+			vis_rect = pygame.Rect(
+				int(cd['left']),
+				int(cd['top']),
+				int(cd['width']),
+				int(cd['height']),
+			)
+			phys_rect = vis_rect.inflate(
+				-int(vis_rect.width * 0.30), -int(vis_rect.height * 0.20)
+			)
+			phys_rect.center = vis_rect.center
 
-		screen_space_cd = dict(cd)
-		screen_space_cd['left'] = cd['left'] - cam_off[0]
-		screen_space_cd['top'] = cd['top'] - cam_off[1]
-		draw_player(screen_space_cd, render_surf)
-		for d in story.DEBRIS:
-			if phys_rect.colliderect(d.rect):
-				if _hit_cooldown == 0:
-					hit = hit1(player.current_health, 10)
-					player.current_health = hit[0]
-					health_message.append(hit[1])
-					phys_rect = story.try_move(
-						phys_rect, -4 if mdx >= 0 else 4, -4 if mdy >= 0 else 4
-					)
-					vis_rect.center = phys_rect.center
-					cd['left'], cd['top'] = vis_rect.left, vis_rect.top
-					_hit_cooldown = 45
-				break
+			fx, fy = story.flow_at(phys_rect.centerx, phys_rect.centery)
+			mdx = dx + int(round(fx))
+			mdy = dy + int(round(fy))
 
-		pygame.transform.scale(render_surf, display.get_size(), display)
+			if mdx == 0 and mdy == 0 and (fx or fy):
+				nudge_x = 1 if fx > 0 else -1 if fx < 0 else 0
+				nudge_y = 1 if fy > 0 else -1 if fy < 0 else 0
+				test = phys_rect.move(nudge_x, 0)
+				if not story.rect_collides_walls(test):
+					phys_rect = test
+				test = phys_rect.move(0, nudge_y)
+				if not story.rect_collides_walls(test):
+					phys_rect = test
+				vis_rect.center = phys_rect.center
+				cd['left'], cd['top'] = vis_rect.left, vis_rect.top
 
-		now = time.time()
-		none = message(
-			100,
-			[
-				f'Health: {player.current_health}',
-				f'Time: {str(int(now - time1))}',
-			],
-			display,
-			20,
-			20,
-		)
+			old = phys_rect
 
-		if ((phys_rect.centerx - old.centerx) != mdx) or (
-			(phys_rect.centery - old.centery) != mdy
-		):
-			hit = hit1(player.current_health, health_message)
-			player.current_health = hit[0]
-			health_message.append(hit[1])
-		index = 0
-		for x in health_message:
-			health_message[index] = message(health_message[index], ['-1'], display, 20,100 * (index + 1),200,(225, 0, 0))
-			index += 1
-			# health_message = message(health_message, ['-1'], display, 20, 100, 300, (225,0,0))
-		message1 = [
-			'WASD / Arrows to swim',
-			'Portals: push into a hole on the outer wall',
-			'Debris = small damage',
-			"Don't hit the walls, it will hurt.",
-			'Find your enemies and destroy them',
-			'You have these items:',
-		]
-		for x in list(player.inventory):
-			message1.append(str(x.description))
+			if mdx or mdy:
+				phys_rect = story.try_move(phys_rect, mdx, mdy)
+				vis_rect.center = phys_rect.center
+				cd['left'], cd['top'] = vis_rect.left, vis_rect.top
 
-		_help_ticks = message(
-			_help_ticks, message1, display, 40, display_size.current_w - 500
-		)
-		if len(health_message) > 0:
+			if mdx or mdy:
+				if abs(mdx) >= abs(mdy):
+					cd['facing'] = 'R' if mdx > 0 else 'L'
+				else:
+					cd['facing'] = 'D' if mdy > 0 else 'U'
+			else:
+				cd.setdefault('facing', 'R')
+			dest = story.maybe_trigger_portal(phys_rect, (mdx, mdy))
+			if dest is not None:
+				phys_rect.center = dest
+				vis_rect.center = dest
+				cd['left'], cd['top'] = vis_rect.left, vis_rect.top
+			cam_off = story.get_camera_offset(phys_rect, veiw_w, veiwh)
+
+			story.draw_drain_chamber(render_surf, cam_off)
+			story.update_and_draw_debris(render_surf, cam_off)
+
+			screen_space_cd = dict(cd)
+			screen_space_cd['left'] = cd['left'] - cam_off[0]
+			screen_space_cd['top'] = cd['top'] - cam_off[1]
+			draw_player(screen_space_cd, render_surf)
+			for d in story.DEBRIS:
+				if phys_rect.colliderect(d.rect):
+					if _hit_cooldown == 0:
+						hit = hit1(player.current_health, 10)
+						player.current_health = hit[0]
+						health_message.append(hit[1])
+						phys_rect = story.try_move(
+							phys_rect, -4 if mdx >= 0 else 4, -4 if mdy >= 0 else 4
+						)
+						vis_rect.center = phys_rect.center
+						cd['left'], cd['top'] = vis_rect.left, vis_rect.top
+						_hit_cooldown = 45
+					break
+
+			pygame.transform.scale(render_surf, display.get_size(), display)
+
+			now = time.time()
+			none = message(100, [f'Health: {player.current_health}', f'Time: {str(int(now - time1))}'], display, 20, 20)
+
+			if ((phys_rect.centerx - old.centerx) != mdx) or (
+				(phys_rect.centery - old.centery) != mdy
+			):
+				hit = hit1(player.current_health, health_message)
+				player.current_health = hit[0]
+				health_message.append(hit[1])
 			index = 0
 			for x in health_message:
-				health_message[index] -= 1
-				if x <= 0:
-					health_message.pop(index)
+				health_message[index] = message(health_message[index], ['-1'], display, 20,100 * (index + 1),200,(225, 0, 0))
 				index += 1
-		if _help_ticks > 300:
-			player.current_health = 500
+				# health_message = message(health_message, ['-1'], display, 20, 100, 300, (225,0,0))
+			message1 = [
+				'WASD / Arrows to swim',
+				'Portals: push into a hole on the outer wall',
+				'Debris = small damage',
+				"Don't hit the walls, it will hurt.",
+				'Find your enemies and destroy them',
+				'You have these items:',
+			]
+			for x in list(player.inventory):
+				message1.append(str(x.description))
 
-		if story.is_enemey(phys_rect):
-			none = combat_main(display, player, enemy1)
-			story.remove_enemy(phys_rect)
-			end = story.is_enemey(phys_rect)
-			print(end)
-			while end:
-				mdx = (mdx + random.randint(-1, 1)) * -1
-				mdy = (mdy + random.randint(-1, 1)) * -1
-				phys_rect = story.try_move(phys_rect, (mdx), (mdy))
+			_help_ticks = message(
+				_help_ticks, message1, display, 40, display_size.current_w - 500
+			)
+			if len(health_message) > 0:
+				index = 0
+				for x in health_message:
+					health_message[index] -= 1
+					if x <= 0:
+						health_message.pop(index)
+					index += 1
+			if _help_ticks > 300:
+				player.current_health = 500
+			if story.is_upgrade(phys_rect):
+				level+=1
+				story.remove_upgrade(phys_rect)
+				health_message.insert(0,600)
+				player.inventory.append(items.basic_wand(level))
+
+
+			try:
+				if health_message[0]>60:
+					message(health_message[0], [f"You upgraded your items to level {level}"], display, 50, display_size.current_w - 1000, 60, (0, 0, 225))
+			except:
+				none=0
+			
+
+			if story.is_enemey(phys_rect):
+				none = combat_main(display, player, enemy1)
+				story.remove_enemy(phys_rect)
 				end = story.is_enemey(phys_rect)
-				if not end:
-					mdx = dx + int(round(fx)) * 4
-					mdy = dy + int(round(fy)) * 4
+				while end:
+					mdx = (mdx + random.randint(-1, 1)) * -1
+					mdy = (mdy + random.randint(-1, 1)) * -1
 					phys_rect = story.try_move(phys_rect, (mdx), (mdy))
 					end = story.is_enemey(phys_rect)
-					print(end)
+					if not end:
+						mdx = dx + int(round(fx)) * 4
+						mdy = dy + int(round(fy)) * 4
+						phys_rect = story.try_move(phys_rect, (mdx), (mdy))
+						end = story.is_enemey(phys_rect)
 
-			print(end)
-		player_hp_bar.value = player.current_health
-		player_hp_bar.render(display)
+			player_hp_bar.value = player.current_health
+			player_hp_bar.render(display)
 
 		for event in pygame.event.get():
 			if event.type == pygame.locals.QUIT:
@@ -340,7 +408,6 @@ def main():
 				sys.exit()
 		pygame.display.flip()
 
-		clock.tick(common.FPS)
 
 
 if __name__ == '__main__':
