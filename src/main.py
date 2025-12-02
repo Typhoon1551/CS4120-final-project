@@ -104,7 +104,7 @@ def draw_player(characterbuild, display):
 
 def hit1(current_health, health_message):
 	current_health -= random.randint(1, 5)
-	health_message = 20
+	health_message = 60
 	return [current_health, health_message]
 
 
@@ -274,7 +274,7 @@ def main():
 			health_message.append(hit[1])
 		index=0
 		for x in health_message:
-			health_message[index]=message(health_message[index], ["-1"], display, 30, 100*(index+1), 200, (225, 0, 0))
+			health_message[index]=message(health_message[index], ["-1"], display, 20, 100*(index+1), 200, (225, 0, 0))
 			index+=1
 			#health_message = message(health_message, ['-1'], display, 20, 100, 300, (225,0,0))
 		message1 = [
@@ -288,7 +288,7 @@ def main():
 		for x in list(player.inventory):
 			message1.append(str(x.description))
 
-		_help_ticks = message(_help_ticks, message1, display, 500, display_size.current_w - 500)
+		_help_ticks = message(_help_ticks, message1, display, 30, display_size.current_w - 500)
 		if len(health_message)>0:
 			index=0
 			for x in health_message:
