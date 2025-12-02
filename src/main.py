@@ -4,7 +4,7 @@ import pygame.locals
 import sys
 import random
 import time
-
+import ui
 # internal imports
 import items
 import character
@@ -167,6 +167,14 @@ def main():
 		'Jill Fish',
 		'A mean-looking barracuda',
 	)
+	player_hp_bar = ui.ProgressBar(
+		(display_size.current_w // 2 - 10, 20),
+		(display_size.current_w // 2 - 40, 20),
+		player.max_health,
+		player.current_health,
+		(255, 0, 0),
+		(0, 255, 0),
+	)
 
 	### Main Loop ###
 	while True:
@@ -299,7 +307,7 @@ def main():
 			message1.append(str(x.description))
 
 		_help_ticks = message(
-			_help_ticks, message1, display, 30, display_size.current_w - 500
+			_help_ticks, message1, display, 40, display_size.current_w - 500
 		)
 		if len(health_message) > 0:
 			index = 0
@@ -329,6 +337,8 @@ def main():
 					print(end)
 
 			print(end)
+		player_hp_bar.value = player.current_health
+		player_hp_bar.render(display)
 
 		for event in pygame.event.get():
 			if event.type == pygame.locals.QUIT:
