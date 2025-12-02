@@ -56,7 +56,7 @@ def empty_bottle():
 
 def drain_o():
 	def effect(player: Character, enemy: Character, this: Item):
-		enemy.current_health -= random.randint(20,100)
+		enemy.current_health -= random.randint(20, 100)
 		player.current_health -= 100
 		enemy.inventory.remove(this)
 
