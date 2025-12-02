@@ -12,7 +12,7 @@ from combat.main import combat_main
 from adventure import story
 import common
 
-
+#fmt: off
 def message(
 	_help_ticks, message, display, y, x, size=28, color=(235, 245, 255)
 ):
@@ -284,26 +284,7 @@ def main():
 			health_message.append(hit[1])
 		index = 0
 		for x in health_message:
-			health_message[index] = message(
-				health_message[index],
-				['-1'],
-				display,
-				20,
-				100 * (index + 1),
-				200,
-				(225, 0, 0),
-			)
-			index += 1
-			# health_message = message(health_message, ['-1'], display, 20, 100, 300, (225,0,0))
-			health_message[index] = message(
-				health_message[index],
-				['-1'],
-				display,
-				20,
-				100 * (index + 1),
-				200,
-				(225, 0, 0),
-			)
+			health_message[index] = message(health_message[index], ['-1'], display, 20,100 * (index + 1),200,(225, 0, 0))
 			index += 1
 			# health_message = message(health_message, ['-1'], display, 20, 100, 300, (225,0,0))
 		message1 = [
@@ -385,3 +366,4 @@ if __name__ == '__main__':
 	story.set_flow_rect(9, 15, 9, 16, 1.0, 0.0)
 	story.set_flow_rect(7, 7, 7, 10, 1.0, 0.0)
 	"""
+#fmt: on
