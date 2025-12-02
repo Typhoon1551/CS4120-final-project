@@ -13,7 +13,8 @@ from combat.main import combat_main
 from adventure import story
 import common
 
-#fmt: off
+
+# fmt: off
 def message(
 	_help_ticks, message, display, y, x, size=28, color=(235, 245, 255)
 ):
@@ -367,4 +368,4 @@ if __name__ == '__main__':
 	story.set_flow_rect(9, 15, 9, 16, 1.0, 0.0)
 	story.set_flow_rect(7, 7, 7, 10, 1.0, 0.0)
 	"""
-#fmt: on
+# fmt: on
