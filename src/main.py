@@ -111,7 +111,13 @@ def hit1(current_health, health_message):
 	health_message = 60
 	return [current_health, health_message]
 
-
+def find_enemy(enemies):
+	good=False
+	while not good:
+		enemy=random.choice(enemies)
+		if enemy.current_health>0:
+			good=True
+			return enemy
 
 
 def main():
@@ -153,11 +159,11 @@ def main():
 	level=1
 	### Player/Enemy Initialization ###
 	player = character.Character(
-		500,
+		700,
 		[
-			items.health_potion(25),
-			items.health_potion(50),
-			items.health_potion(75),
+			items.health_potion(100),
+			items.health_potion(100),
+			items.health_potion(100),
 			items.basic_wand(level),
 
 		],
@@ -165,14 +171,14 @@ def main():
 		'A cute little guppy',
 	)
 
-	enemy1 = character.Character(
-		50,
-		[
-			items.empty_bottle(),
-		],
-		'Jill Fish',
-		'A mean-looking barracuda',
-	)
+	enemy1 = character.Character(200,[], 'Feces Blockage', 'Death for you')
+	enemy2 = character.Character(500,[], 'Netting', 'Death for you')
+	enemy3 = character.Character(50,[], 'Floss', 'Death for you')
+	enemy4 = character.Character(100,[], 'Hair clump', 'Death for you')
+	enemy5 = character.Character(40,[], 'Grese', 'Death for you')
+	enemy6 = character.Character(150,[], 'Mold Colony', 'Death for you')
+
+
 	player_hp_bar = ui.ProgressBar(
 		(display_size.current_w // 2 - 10, 20),
 		(display_size.current_w // 2 - 40, 20),
@@ -181,7 +187,9 @@ def main():
 		(255, 0, 0),
 		(0, 255, 0),
 	)
-
+	enemies=[enemy1,enemy2,enemy3, enemy4, enemy5, enemy6]
+	for x in enemies:
+		x.inventory.append(items.drain_o())
 	### Main Loop ###
 	while True:
 		
@@ -213,10 +221,11 @@ def main():
 
 				exit_button.render(display)
 				pygame.display.update()
-
+			pygame.quit()
+			sys.exit()
 			break
 
-		elif enemy1.current_health<=0:
+		elif all(e.current_health <= 0 for e in enemies):
 			overlay = pygame.Surface(display.get_size(), pygame.SRCALPHA)
 			font = pygame.font.SysFont(None, 500)
 			lines = "YOU WON"
@@ -243,6 +252,8 @@ def main():
 				exit_button.render(display)
 
 				pygame.display.update()
+			pygame.quit()
+			sys.exit()
 			break
 
 		
@@ -349,10 +360,12 @@ def main():
 				# health_message = message(health_message, ['-1'], display, 20, 100, 300, (225,0,0))
 			message1 = [
 				'WASD / Arrows to swim',
-				'Portals: push into a hole on the outer wall',
+				'Portals surround the pipes. they hurt a little',
 				'Debris = small damage',
 				"Don't hit the walls, it will hurt.",
 				'Find your enemies and destroy them',
+				"Use your wizard powers to stay safe"
+				'Look around for upgrades, they will matter a lot.',
 				'You have these items:',
 			]
 			for x in list(player.inventory):
@@ -369,7 +382,7 @@ def main():
 						health_message.pop(index)
 					index += 1
 			if _help_ticks > 300:
-				player.current_health = 500
+				player.current_health = 700
 			if story.is_upgrade(phys_rect):
 				level+=1
 				story.remove_upgrade(phys_rect)
@@ -385,7 +398,8 @@ def main():
 			
 
 			if story.is_enemey(phys_rect):
-				none = combat_main(display, player, enemy1)
+				enemy=find_enemy(enemies)
+				none = combat_main(display, player, enemy)
 				story.remove_enemy(phys_rect)
 				end = story.is_enemey(phys_rect)
 				while end:
@@ -401,11 +415,13 @@ def main():
 
 			player_hp_bar.value = player.current_health
 			player_hp_bar.render(display)
+			clock.tick(common.FPS)
 
 		for event in pygame.event.get():
 			if event.type == pygame.locals.QUIT:
 				pygame.quit()
 				sys.exit()
+		time.sleep(0.0001)
 		pygame.display.flip()
 
 

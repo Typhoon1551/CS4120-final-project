@@ -1,7 +1,7 @@
 from typing import Any, Callable
 
 import pygame
-
+import random
 import maths
 from character import Character
 
@@ -56,9 +56,9 @@ def empty_bottle():
 
 def drain_o():
 	def effect(player: Character, enemy: Character, this: Item):
-		enemy.current_health -= 100
+		enemy.current_health -= random.randint(20,100)
 		player.current_health -= 100
-		player.inventory.remove(this)
+		enemy.inventory.remove(this)
 
 	return Item(
 		True,
