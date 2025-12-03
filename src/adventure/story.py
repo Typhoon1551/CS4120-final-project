@@ -2,10 +2,12 @@ import pygame
 import random
 from typing import List, Tuple
 
+# fmt: off
 TILE_SIZE: int = 64
 T_EMPTY: int = 0
 T_WALL: int = 1
-
+T_ENEMY: int = 2
+T_UPGRADE: int=3
 COLOR_WATER_BG = (18, 28, 38)
 COLOR_PIPE_WALL = (180, 190, 200)
 COLOR_PIPE_OUTLINE = (130, 140, 150)
@@ -13,319 +15,19 @@ COLOR_PORTAL_TILE = (68, 28, 38)
 
 
 DRAIN_CHAMBER_ROWS = [
-	# 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23
-	[
-		1,
-		1,
-		1,
-		1,
-		1,
-		1,
-		1,
-		1,
-		1,
-		1,
-		1,
-		1,
-		1,
-		1,
-		1,
-		1,
-		1,
-		1,
-		1,
-		1,
-		1,
-		1,
-		1,
-		1,
-	],  # 0
-	[
-		1,
-		1,
-		1,
-		1,
-		1,
-		1,
-		1,
-		0,
-		1,
-		1,
-		1,
-		1,
-		1,
-		1,
-		1,
-		0,
-		0,
-		0,
-		0,
-		0,
-		0,
-		0,
-		0,
-		1,
-	],  # 1
-	[
-		0,
-		0,
-		0,
-		0,
-		0,
-		0,
-		0,
-		0,
-		0,
-		0,
-		0,
-		0,
-		0,
-		0,
-		0,
-		0,
-		1,
-		1,
-		1,
-		0,
-		1,
-		1,
-		1,
-		1,
-	],  # 2
-	[
-		0,
-		0,
-		0,
-		0,
-		0,
-		0,
-		0,
-		0,
-		0,
-		0,
-		0,
-		0,
-		0,
-		0,
-		0,
-		0,
-		0,
-		1,
-		1,
-		0,
-		1,
-		1,
-		1,
-		1,
-	],  # 3
-	[
-		1,
-		1,
-		1,
-		1,
-		1,
-		0,
-		1,
-		1,
-		1,
-		1,
-		0,
-		1,
-		1,
-		1,
-		1,
-		0,
-		0,
-		1,
-		1,
-		0,
-		1,
-		1,
-		1,
-		1,
-	],  # 4
-	[
-		1,
-		0,
-		0,
-		0,
-		0,
-		0,
-		1,
-		1,
-		1,
-		1,
-		0,
-		1,
-		1,
-		1,
-		1,
-		0,
-		0,
-		1,
-		1,
-		1,
-		1,
-		1,
-		1,
-		1,
-	],  # 5
-	[
-		1,
-		0,
-		1,
-		1,
-		1,
-		0,
-		1,
-		1,
-		1,
-		1,
-		0,
-		1,
-		0,
-		0,
-		0,
-		1,
-		0,
-		0,
-		0,
-		0,
-		0,
-		0,
-		0,
-		0,
-	],  # 6
-	[
-		1,
-		0,
-		1,
-		1,
-		1,
-		0,
-		1,
-		0,
-		0,
-		0,
-		0,
-		1,
-		0,
-		1,
-		0,
-		1,
-		0,
-		0,
-		0,
-		0,
-		0,
-		0,
-		0,
-		0,
-	],  # 7
-	[
-		1,
-		0,
-		1,
-		0,
-		0,
-		0,
-		1,
-		0,
-		1,
-		1,
-		0,
-		1,
-		0,
-		1,
-		0,
-		1,
-		1,
-		1,
-		0,
-		1,
-		1,
-		1,
-		0,
-		1,
-	],  # 8
-	[
-		1,
-		0,
-		1,
-		1,
-		1,
-		0,
-		1,
-		0,
-		0,
-		1,
-		0,
-		1,
-		0,
-		1,
-		0,
-		0,
-		0,
-		1,
-		0,
-		1,
-		0,
-		1,
-		0,
-		1,
-	],  # 9
-	[
-		1,
-		0,
-		1,
-		0,
-		0,
-		0,
-		1,
-		1,
-		0,
-		1,
-		0,
-		1,
-		0,
-		1,
-		1,
-		1,
-		0,
-		0,
-		0,
-		1,
-		0,
-		0,
-		0,
-		1,
-	],  # 10
-	[
-		1,
-		1,
-		1,
-		1,
-		1,
-		1,
-		1,
-		1,
-		1,
-		1,
-		1,
-		1,
-		1,
-		1,
-		1,
-		1,
-		1,
-		1,
-		1,
-		1,
-		1,
-		1,
-		1,
-		1,
-	],  # 11
+	#0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23
+	[1,1,1,1,1,1,1,1,1,1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], #0
+	[1,1,1,1,1,1,1,3,1,1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 2, 0, 0, 3, 1], #1
+	[0,0,0,0,0,0,0,0,0,0, 0, 0, 2, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1], #2
+	[0,0,0,0,0,0,0,0,0,0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1], #3
+	[1,1,1,1,1,0,1,1,1,1, 0, 1, 1, 1, 1, 0, 0, 1, 1, 3, 1, 1, 1, 1], #4
+	[1,2,0,0,0,0,1,1,1,1, 0, 1, 1, 3, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1], #5
+	[1,0,1,1,1,0,1,1,1,1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0], #6
+	[1,0,1,1,1,2,1,0,0,0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0], #7
+	[1,0,1,0,0,3,1,0,1,1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1], #8
+	[1,0,1,1,1,0,1,0,0,1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1], #9
+	[1,0,1,3,2,0,1,1,2,1, 0, 1, 3, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1], #10
+	[1,1,1,1,1,1,1,1,1,1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], #11
 ]
 
 MAP_H_TILES = len(DRAIN_CHAMBER_ROWS)
@@ -341,7 +43,12 @@ for r in range(MAP_H_TILES):
 			r == 0 or r == MAP_H_TILES - 1 or c == 0 or c == MAP_W_TILES - 1
 		):
 			PORTAL_TILES.append((r, c))
-print(PORTAL_TILES)
+	for c in range(MAP_W_TILES):
+		if DRAIN_CHAMBER_ROWS[r][c] == T_EMPTY and (
+			r == 0 or r == MAP_H_TILES - 1 or c == 0 or c == MAP_W_TILES - 1
+		):
+			PORTAL_TILES.append((r, c))
+# print(PORTAL_TILES)
 
 
 def random_portal(
@@ -406,16 +113,89 @@ def rect_collides_walls(rect: Rect) -> bool:
 					return True
 	return False
 
+def is_upgrade(rect: Rect) -> bool:
+	left_tile = max(0, rect.left // TILE_SIZE)
+	right_tile = min(MAP_W_TILES - 1, max(0, (rect.right - 1) // TILE_SIZE))
+	top_tile = max(0, rect.top // TILE_SIZE)
+	bottom_tile = min(MAP_H_TILES - 1, max(0, (rect.bottom - 1) // TILE_SIZE))
+	for r in range(top_tile, bottom_tile + 1):
+		for c in range(left_tile, right_tile + 1):
+			if DRAIN_CHAMBER_ROWS[r][c] == T_UPGRADE:
+				tile_rect = Rect(
+					c * TILE_SIZE, r * TILE_SIZE, TILE_SIZE, TILE_SIZE
+				)
+				if rect.colliderect(tile_rect):
+					return True
+	return False
 
-def try_move(rect: Rect, dx: int, dy: int) -> Rect:
-	r = rect.move(dx, 0)
-	if not rect_collides_walls(r):
-		rect = r
-	r = rect.move(0, dy)
-	if not rect_collides_walls(r):
-		rect = r
-	rect.left = max(0, min(rect.left, MAP_W_PX - rect.width))
-	rect.top = max(0, min(rect.top, MAP_H_PX - rect.height))
+
+def remove_upgrade(rect: Rect) -> bool:
+	left_tile = max(0, rect.left // TILE_SIZE)
+	right_tile = min(MAP_W_TILES - 1, max(0, (rect.right - 1) // TILE_SIZE))
+	top_tile = max(0, rect.top // TILE_SIZE)
+	bottom_tile = min(MAP_H_TILES - 1, max(0, (rect.bottom - 1) // TILE_SIZE))
+	for r in range(top_tile, bottom_tile + 1):
+		for c in range(left_tile, right_tile + 1):
+			if DRAIN_CHAMBER_ROWS[r][c] == T_UPGRADE:
+				tile_rect = Rect(
+					c * TILE_SIZE, r * TILE_SIZE, TILE_SIZE, TILE_SIZE
+				)
+				if rect.colliderect(tile_rect):
+					DRAIN_CHAMBER_ROWS[r][c] = T_EMPTY
+
+def is_enemey(rect: Rect) -> bool:
+	left_tile = max(0, rect.left // TILE_SIZE)
+	right_tile = min(MAP_W_TILES - 1, max(0, (rect.right - 1) // TILE_SIZE))
+	top_tile = max(0, rect.top // TILE_SIZE)
+	bottom_tile = min(MAP_H_TILES - 1, max(0, (rect.bottom - 1) // TILE_SIZE))
+	for r in range(top_tile, bottom_tile + 1):
+		for c in range(left_tile, right_tile + 1):
+			if DRAIN_CHAMBER_ROWS[r][c] == T_ENEMY:
+				tile_rect = Rect(
+					c * TILE_SIZE, r * TILE_SIZE, TILE_SIZE, TILE_SIZE
+				)
+				if rect.colliderect(tile_rect):
+					return True
+	return False
+
+
+def remove_enemy(rect: Rect) -> bool:
+	left_tile = max(0, rect.left // TILE_SIZE)
+	right_tile = min(MAP_W_TILES - 1, max(0, (rect.right - 1) // TILE_SIZE))
+	top_tile = max(0, rect.top // TILE_SIZE)
+	bottom_tile = min(MAP_H_TILES - 1, max(0, (rect.bottom - 1) // TILE_SIZE))
+	for r in range(top_tile, bottom_tile + 1):
+		for c in range(left_tile, right_tile + 1):
+			if DRAIN_CHAMBER_ROWS[r][c] == T_ENEMY:
+				tile_rect = Rect(
+					c * TILE_SIZE, r * TILE_SIZE, TILE_SIZE, TILE_SIZE
+				)
+				if rect.colliderect(tile_rect):
+					DRAIN_CHAMBER_ROWS[r][c] = T_EMPTY
+
+
+R = 0
+def try_move(rect: Rect, dx: int, dy: int):
+	try:
+		R += 1
+	except:
+		R = 0
+	zero = random.randint(-1, 1)
+	if abs(dx) < 30 or abs(dy) < 30 and R < 100:
+		r = rect.move(dx, dy)
+		if not rect_collides_walls(r):
+			rect = r
+		else:
+			rect = try_move(rect, (dx + zero) * (-4), (dy + zero) * (-4))
+		"""r1 = rect.move(0, )
+		if not rect_collides_walls(r1):
+			rect = r1
+		else:
+			rect = try_move(rect,(dx+zero)*(4),dy*(-5))"""
+
+		rect.left = max(0, min(rect.left, MAP_W_PX - rect.width))
+		rect.top = max(0, min(rect.top, MAP_H_PX - rect.height))
+	R = 0
 	return rect
 
 
@@ -450,6 +230,19 @@ def draw_drain_chamber(
 				rect = Rect(rx, ry, TILE_SIZE, TILE_SIZE)
 				pygame.draw.rect(surface, COLOR_PIPE_WALL, rect)
 				pygame.draw.rect(surface, COLOR_PIPE_OUTLINE, rect, width=2)
+			if DRAIN_CHAMBER_ROWS[r][c] == T_ENEMY:
+				rx = c * TILE_SIZE - cam_x
+				ry = r * TILE_SIZE - cam_y
+				rect = Rect(rx, ry, TILE_SIZE, TILE_SIZE)
+				pygame.draw.rect(surface, (0, 0, 0), rect)
+			if (r, c) in PORTAL_TILES:
+				rx = c * TILE_SIZE - cam_x
+				ry = r * TILE_SIZE - cam_y
+				rect = Rect(rx, ry, TILE_SIZE, TILE_SIZE)
+				if y_n == 1:
+					pygame.draw.rect(surface, COLOR_PORTAL_TILE, rect)
+				else:
+					pygame.draw.rect(surface, COLOR_WATER_BG, rect)
 
 
 def get_safe_start_rect(width: int = 40, height: int = 24) -> Rect:
@@ -536,34 +329,118 @@ def spawn_debris_near(cx: int, cy: int, count: int = 3):
 			DEBRIS.append(Debris(rect.left, rect.top, w, h, vx, vy))
 
 
-FLOW: dict[tuple[int, int], tuple[float, float]] = {}
+FLOW: dict[tuple[int, int], tuple[float, float]] = {
+	(2, 0): (1.0, 0.0), (2, 1): (1.5, 0.0), (2, 2): (1.5, 0.0), (2, 3): (1.5, 0.0), 
+	(2, 4): (1.5, 0.0), (2, 5): (1.5, 0.5), (2, 6): (1.5, 0.0), (2, 7): (1.5, 1.2), 
+	(2, 8): (1.5, 0.0), (2, 9): (1.5, 0.0), (2, 10): (1.5, 0.0), (2, 11): (2.0, 0.4), 
+	(2, 12): (1.5, 0.0), (2, 13): (1.5, 0.0), (2, 14): (1.5, 0.0), (2, 15): (0.0, 2.5),(2,19):(0.0,-1.0),(3,19):(0.0,-5.0), 
+	(3, 0): (1.0, 0.0), (3, 1): (1.5, 0.0), (3, 2): (1.5, 0.0), (3, 3): (1.5, 0.0), 
+	(3, 4): (1.5, 0.0), (3, 5): (1.5, -1.5), (3, 6): (1.5, 0.0), (3, 7): (1.5, 0.0), (3, 8): (1.5, 0.0), 
+	(3, 9): (1.5, 0.0), (3, 10): (1.5, 0.0), (3, 11): (0.5, -2.0), (3, 12): (1.5, 0.0), (3, 13): 
+	(1.5, 0.0), (3, 14): (1.5, 0.0), (3, 15): (1.5, 1.0), (3, 16): (1.0, 1.5), (4, 15):(1.5,0.0),(4, 16): (0.2, 3.4), 
+	(5, 16): (1.0, 1.7), (6, 16): (2.2, 1.5), (6, 17): (2.3, 0.0), (6, 18): (2.3, 0.0), (6, 19): 
+	(2.3, 0.0), (6, 20): (2.3, 0.0), (6, 21): (2.3, 0.0), (6, 22): (2.3, 0.0), (6, 23): (1.0, 0.0), 
+	(7, 16): (2.3, 0.0), (7, 17): (2.3, 0.0), (7, 18): (2.3, 0.0), (7, 19): (2.3, 0.0), (7, 20): 
+	(2.3, 0.0), (7, 21): (2.3, 0.0), (7, 22): (2.3, 0.0), (7, 23): (1.0, 0.0), (1, 16): (-1.5, 0.0), 
+	(1, 17): (-1.5, 0.0), (1, 18): (-1.5, 0.0), (1, 19): (-1.5, -0.5), (1, 20): (-1.5, 0.0), 
+	(1, 21): (-1.5, 0.0), (1, 22): (-1.5, 0.0), (1, 15): (-0.8, 1.5), (1, 7): (0.0, 1.2), 
+	(5, 1): (1.8, 0.0), (5, 2): (1.8, 0.0), (5, 3): (1.8, 0.0), (5, 4): (1.8, 0.0), (5, 5): (0.8, -2.8), 
+	(4, 5): (-0.2, -1.4), (6, 5): (0.0, -1.4), (7, 5): (0.0, -1.4), (8, 5): (0.0, -1.4), 
+	(9, 5): (0.0, -1.4), (10, 5): (1.0, -1.4), (4, 10): (0.0, -1.2), (5, 10): (0.0, -1.2), 
+	(6, 10): (0.0, -1.2), (7, 10): (0.0, -1.2), (8, 10): (0.0, -1.2), (9, 10): (0.0, -1.2), 
+	(10, 10): (0.0, -1.2), (6, 12): (1.4, 0.0), (6, 13): (1.4, 0.0), (6, 14): (1.4, 0.0), 
+	(7, 14): (0.0, 1.0), (9, 15): (1.0, 0.0), (9, 16): (1.0, 0.0), (9, 1): (0.0, -1.0), 
+	(10, 1): (0.0, -1.0), (10, 3): (1.0, 0.0), (10, 4): (1.0, 0.0), (10,8):(-4.0,-4.0),(9,8):(-1.0,-1.0)}
 
 
-def set_flow_tile(r: int, c: int, fx: float, fy: float) -> None:
-	if (
-		0 <= r < MAP_H_TILES
-		and 0 <= c < MAP_W_TILES
-		and DRAIN_CHAMBER_ROWS[r][c] == T_EMPTY
-	):
-		FLOW[(r, c)] = (fx, fy)
+def clear_flow():
+	FLOW.clear()
 
 
-def set_flow_rect(
-	r0: int, c0: int, r1: int, c1: int, fx: float, fy: float
-) -> None:
+def set_flow_tile(r, c, fx, fy):
+	if 0 <= r < MAP_H_TILES and 0 <= c < MAP_W_TILES:
+		if DRAIN_CHAMBER_ROWS[r][c] == T_EMPTY:
+			if (r, c) in FLOW:
+				old = FLOW[(r, c)]
+				FLOW[(r, c)] = (old[0] + fx, old[1] + fy)
+			else:
+				FLOW[(r, c)] = (fx, fy)
+
+
+def set_flow_rect(r0, c0, r1, c1, fx, fy):
 	r0, r1 = sorted((max(0, r0), min(MAP_H_TILES - 1, r1)))
 	c0, c1 = sorted((max(0, c0), min(MAP_W_TILES - 1, c1)))
 	for rr in range(r0, r1 + 1):
 		for cc in range(c0, c1 + 1):
 			if DRAIN_CHAMBER_ROWS[rr][cc] == T_EMPTY:
-				FLOW[(rr, cc)] = (fx, fy)
+				if (rr, cc) in FLOW:
+					old = FLOW[(rr, cc)]
+					FLOW[(rr, cc)] = (old[0] + fx, old[1] + fy)
+				else:
+					FLOW[(rr, cc)] = (fx, fy)
 
 
-def clear_flow() -> None:
-	FLOW.clear()
-
-
-def flow_at(x: int, y: int) -> tuple[float, float]:
+def flow_at(x, y):
 	r = max(0, min(MAP_H_TILES - 1, y // TILE_SIZE))
 	c = max(0, min(MAP_W_TILES - 1, x // TILE_SIZE))
 	return FLOW.get((r, c), (0.0, 0.0))
+
+
+def setup_flow():
+	"""
+	clear_flow()
+	# MAIN TRUNK — TOP HORIZONTAL
+	# rows 2–3, cols 0–15: strong rightward flow
+	set_flow_rect(2, 0, 3, 15, 2.0, 0.0)
+
+	# MAIN TRUNK — VERTICAL DROP
+	# column 16, rows 3–6: down into lower trunk
+	# (this intersects tiles near the bend; overlap = diagonal)
+	set_flow_rect(2, 16, 6, 16, 1.0, 2.0)
+
+	# MAIN TRUNK — BOTTOM HORIZONTAL
+	# rows 6–7, cols 16–23: main flow to the outlet
+	set_flow_rect(6, 16, 7, 23, 2.3, 0.0)
+
+	# TOP RESERVOIR POOL (row 1, cols 15–22)
+	# Water drifts left into the junction, then drops down.
+	set_flow_rect(1, 16, 1, 22, -1.5, 0.0)   # leftward along the top
+	set_flow_rect(1, 15, 1, 15, -1.5, 1.5)   # at 1,15: left + down
+	set_flow_rect(1, 15, 2, 15, -1.5, 1.5)   # at 1,15: left + down
+	set_flow_rect(2, 15, 2, 15, 0.0, 1.5)    # at 2,15: reinforce downward into trunk
+
+	# LITTLE INLET ON (1,7)
+	# Feeds down into the top main.
+	set_flow_rect(1, 7, 2, 7, 0.0, 1.2)
+
+	# MID-LEFT BRANCH — HORIZONTAL (row 5, cols 1–5)
+	# Gentle flow toward the junction at (5,5).
+	set_flow_rect(5, 1, 5, 5, 1.8, 0.0)
+
+	# MID-LEFT BRANCH — VERTICAL (col 5, rows 4–10)
+	# Sucks water upward into that mid-left branch.
+	set_flow_rect(4, 5, 10, 5, 0.0, -1.4)
+
+	# CENTRAL VERTICAL FEEDER — (col 10, rows 4–10)
+	# Pulls up toward the middle of the map.
+	set_flow_rect(4, 10, 10, 10, 0.0, -1.2)
+
+	# LOWER SIDE CHANNEL — (row 6, cols 12–14)
+	# Drifts right, then bends down at (7,14) toward the lower trunk area.
+	set_flow_rect(6, 12, 6, 14, 1.4, 0.0)  # right
+	set_flow_rect(7, 14, 7, 14, 0.0, 1.0)  # downward at the bend
+
+	# BOTTOM POCKET NEAR RIGHT — (row 9, cols 15–16)
+	# Small rightward eddy under the trunk.
+	set_flow_rect(9, 15, 9, 16, 1.0, 0.0)
+
+	# BOTTOM-LEFT VERTICAL — (col 1, rows 9–10)
+	# Pulls up into the lower maze.
+	set_flow_rect(9, 1, 10, 1, 0.0, -1.0)
+
+	# BOTTOM-LEFT HORIZONTAL — (row 10, cols 3–4)
+	# Short rightward drift.
+	set_flow_rect(10, 3, 10, 4, 1.0, 0.0)
+	print(FLOW)
+	"""
+# fmt: on
