@@ -3,8 +3,11 @@ import pygame
 import common
 import ui
 from character import Character
+from .character_profile import CharacterProfile
+
 import random
 import time
+
 
 BG_COLOR = (135, 206, 235)
 
@@ -51,7 +54,7 @@ def combat_main(display: pygame.Surface, player: Character, enemy: Character):
 	exit_button = ui.Button(
 		(20, window_height - 70),
 		(100, 50),
-		'EXIT',
+		"EXIT",
 		color=(255, 255, 255),
 		hovered_color=(255, 0, 0),
 		padding=10,
@@ -60,7 +63,7 @@ def combat_main(display: pygame.Surface, player: Character, enemy: Character):
 	inventory_title = ui.TextBox(
 		(window_width // 2, 20),
 		(window_width // 2 - 20, 80),
-		'Which item to use?',
+		"Which item to use?",
 		color=(230, 230, 230),
 		padding=15,
 	)
@@ -68,41 +71,24 @@ def combat_main(display: pygame.Surface, player: Character, enemy: Character):
 	### Combatant Profiles ###
 
 	### Player Profile ###
-	player_title = ui.TextBox(
+	player_profile = CharacterProfile(
+		player,
 		(20, 20),
-		(window_width // 2 - 40, 80),
-		player.name,
-		padding=15,
-		color=BG_COLOR,
-	)
-	player_hp_bar = ui.ProgressBar(
-		(20, 120),
-		(window_width // 2 - 40, 40),
-		player.max_health,
-		player.current_health,
-		(255, 0, 0),
-		(0, 255, 0),
+		(window_width // 2 - 40, window_height // 2 - 20),
+		BG_COLOR,
 	)
 
 	### Enemy Profile
 
-	enemy_title = ui.TextBox(
+	enemy_profile = CharacterProfile(
+		enemy,
 		(20, window_height // 2),
-		(window_width // 2 - 40, 80),
-		enemy.name,
-		padding=15,
-		color=BG_COLOR,
+		(window_width // 2 - 40, window_height // 2 - 20),
+		BG_COLOR,
 	)
-	enemy_hp_bar = ui.ProgressBar(
-		(20, window_height // 2 + 100),
-		(window_width // 2 - 40, 40),
-		enemy.max_health,
-		enemy.current_health,
-		(255, 0, 0),
-		(0, 255, 0),
-	)
+
 	message_time = 0
-	power = ''
+	power = ""
 	damage = 0
 
 	### main loop ###
@@ -110,11 +96,9 @@ def combat_main(display: pygame.Surface, player: Character, enemy: Character):
 		display.blit(background, (0, 0))
 
 		### Exit Button ###
-		if exit_button.pressed() == True:
+		if exit_button.pressed():
 			running = False
 			return running
-			break
-			continue
 
 		### Inventory ###
 		inventory_buttons = []
@@ -139,11 +123,11 @@ def combat_main(display: pygame.Surface, player: Character, enemy: Character):
 			)
 
 		### Update Profiles ###
-		player_hp_bar.value = player.current_health
-		enemy_hp_bar.value = enemy.current_health
+		player_profile.update_info(player)
+		enemy_profile.update_info(enemy)
 
 		### Render Elements ###
-		if enemy.current_health < 0:
+		if enemy.current_health <= 0:
 			exit_button.render(display)
 			player_turn = True
 		elif player.current_health <= 0:
@@ -167,7 +151,7 @@ def combat_main(display: pygame.Surface, player: Character, enemy: Character):
 				# print(damage)
 			else:
 				damage = random.randint(10, 50)
-				power = 'itself being toxic'
+				power = "itself being toxic"
 				player.current_health -= damage
 				player_turn = True
 		for i in inventory_buttons:
@@ -177,16 +161,13 @@ def combat_main(display: pygame.Surface, player: Character, enemy: Character):
 				)
 				player_turn = False
 
-		player_title.render(display)
-		player_hp_bar.render(display)
-
-		enemy_title.render(display)
-		enemy_hp_bar.render(display)
+		player_profile.render(display)
+		enemy_profile.render(display)
 
 		message_time = message(
 			message_time,
 			[
-				f'Enemy used {power}, which dealt you {damage} damage. You are at {player.current_health} health'
+				f"Enemy used {power}, which dealt you {damage} damage. You are at {player.current_health} health"
 			],
 			display,
 			(window_height - 40) // 2,
@@ -198,7 +179,7 @@ def combat_main(display: pygame.Surface, player: Character, enemy: Character):
 		### Event Handling ###
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
-				result = 'quit'
+				result = "quit"
 				running = False
 
 		clock.tick(common.FPS)
