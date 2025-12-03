@@ -17,32 +17,32 @@ This project uses [UV](https://docs.astral.sh/uv/) for dependency management. In
 
 ### Story
 - [x] Player Movement
-  - [ ] Character rotation
-  - [ ] Interaction with walls, enemies, upgrades
+  - [x] Character rotation
+  - [x] Interaction with walls, enemies, upgrades
 - [x] Background
 - [x] Interactive Map
 - [x] Combat Encounters
-- [ ] Current flows (semi-operational)
-- [ ] Walls
-  - [ ] Wall-player collisions
-- [ ] Portals
-- [ ] Camera
-  - [ ] Camera movement when approaching edge of map
-- [ ] Messages
-  - [ ] Hit points from bouncing off of walls
-  - [ ] Instructions
-  - [ ] health + time
-- [ ] Health Bar
-- [ ] Debris
-  - [ ] Spawning debris
-  - [ ] Debris interaction
-  - [ ] Debris bouncing off of walls
-- [ ] Building Enemies and interaction
-- [ ] Building Items
-- [ ] Activiating upgrades
-- [ ] End screens
-- [ ] Correccting errors + Bug checking
-- [ ] Activating combat
+- [x] Current flows (semi-operational)
+- [x] Walls
+  - [x] Wall-player collisions
+- [x] Portals
+- [x] Camera
+  - [x] Camera movement when approaching edge of map
+- [x] Messages
+  - [x] Hit points from bouncing off of walls
+  - [x] Instructions
+  - [x] health + time
+- [x] Health Bar
+- [x] Debris
+  - [x] Spawning debris
+  - [x] Debris interaction
+  - [x] Debris bouncing off of walls
+- [x] Building Enemies and interaction
+- [x] Building Items
+- [x] Activiating upgrades
+- [x] End screens
+- [x] Correccting errors + Bug checking
+- [x] Activating combat
 
 ### Combat
 - [x] Custom UI Framework
