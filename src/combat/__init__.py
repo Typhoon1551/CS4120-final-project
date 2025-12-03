@@ -1,3 +1,4 @@
-from combat.main import combat_main
+from .main import combat_main
+from .character_profile import CharacterProfile
 
-__all__ = ['combat_main']
+__all__ = ["combat_main", "CharacterProfile"]
