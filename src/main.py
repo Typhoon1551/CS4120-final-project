@@ -170,7 +170,7 @@ def main():
 		"A cute little guppy",
 	)
 
-	enemy1 = character.Character(200, [], "Feces Blockage", "Death for you")
+	enemy1 = character.Character(200, [], "Pizza Box", "Death for you")
 	enemy2 = character.Character(500, [], "Netting", "Death for you")
 	enemy3 = character.Character(50, [], "Floss", "Death for you")
 	enemy4 = character.Character(100, [], "Hair clump", "Death for you")
