@@ -25,7 +25,7 @@ def message(
 		for ln in lines:
 			txt = font.render(ln, True, color)
 			overlay.blit(txt, (x, y))
-			y += 32
+			y += 45
 		display.blit(overlay, (0, 0))
 		_help_ticks -= 1
 	return _help_ticks
@@ -197,7 +197,7 @@ def main():
 		if player.current_health<=0:
 			overlay = pygame.Surface(display.get_size(), pygame.SRCALPHA)
 			font = pygame.font.SysFont(None, 500)
-			lines = "YOU LOST"
+			lines = "YOU DIED"
 			txt = font.render(lines, True, color=c)
 			overlay.blit(txt, (20, display_size.current_h//4))
 			display.blit(overlay, (15, 0))
@@ -361,10 +361,12 @@ def main():
 			message1 = [
 				'WASD / Arrows to swim',
 				'Portals surround the pipes. they hurt a little',
+				'Use the portals to get around. Beware, some lead to enemies',
+				"but some lead to friends.",
 				'Debris = small damage',
 				"Don't hit the walls, it will hurt.",
 				'Find your enemies and destroy them',
-				"Use your wizard powers to stay safe"
+				"Use your wizard powers to stay safe",
 				'Look around for upgrades, they will matter a lot.',
 				'You have these items:',
 			]
@@ -372,7 +374,7 @@ def main():
 				message1.append(str(x.description))
 
 			_help_ticks = message(
-				_help_ticks, message1, display, 40, display_size.current_w - 500
+				_help_ticks, message1, display, 40, display_size.current_w - 500, 40
 			)
 			if len(health_message) > 0:
 				index = 0
