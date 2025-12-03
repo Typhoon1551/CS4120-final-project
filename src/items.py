@@ -11,7 +11,7 @@ class Item:
 	name: str
 	description: str
 	icon: pygame.Surface | None
-	effect: Callable[[Character, Character, 'Item'], Any]
+	effect: Callable[[Character, Character, "Item"], Any]
 
 	def __init__(self, _active, _name, _description, _icon, _effect):
 		self.active = _active
@@ -33,8 +33,8 @@ def health_potion(healing):
 
 	return Item(
 		True,
-		'Health Potion',
-		f'A potion that heals you for {healing} hp',
+		"Health Potion",
+		f"A potion that heals you for {healing} hp",
 		None,
 		e,
 	)
@@ -47,7 +47,7 @@ def empty_bottle():
 
 	return Item(
 		True,
-		'Empty Bottle',
+		"Empty Bottle",
 		"Break on enemy's head to deal 10 damage",
 		None,
 		effect,
@@ -62,8 +62,8 @@ def drain_o():
 
 	return Item(
 		True,
-		'Drain-O',
-		'Pour out to deal 100 damage to yourself and enemy',
+		"Drain-O",
+		"Pour out to deal 100 damage to yourself and enemy",
 		None,
 		effect,
 	)
@@ -75,8 +75,8 @@ def basic_wand(level):
 
 	return Item(
 		True,
-		f'Basic Wand, level {level}',
-		f'Wave to deal enemy {5**level} damage',
+		f"Basic Wand, level {level}",
+		f"Wave to deal enemy {5**level} damage",
 		None,
 		e,
 	)

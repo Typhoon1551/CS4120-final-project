@@ -17,7 +17,7 @@ class TextBox:
 		size: tuple[int, int],
 		text: str,
 		text_color: tuple[int, int, int] = (0, 0, 0),
-		text_font: tuple[str, bool] = ('Arial', True),
+		text_font: tuple[str, bool] = ("Arial", True),
 		color: tuple[int, int, int] = (255, 255, 255),
 		padding: int = 0,
 	):

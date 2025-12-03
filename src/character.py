@@ -8,11 +8,11 @@ class Character:
 	name: str
 	description: str
 	character_design = {
-		'color': (0, 120, 120),
-		'left': 50,
-		'top': 100,
-		'width': 25,
-		'height': 25,
+		"color": (0, 120, 120),
+		"left": 50,
+		"top": 100,
+		"width": 25,
+		"height": 25,
 	}
 
 	def __init__(self, _health, _starting_inven, _name, _description):
