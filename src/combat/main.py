@@ -3,8 +3,26 @@ import pygame
 import common
 import ui
 from character import Character
+import random
+import time
 
 BG_COLOR = (135, 206, 235)
+
+
+def message(
+	_help_ticks, message, display, y, x, size=28, color=(235, 245, 255)
+):
+	if _help_ticks > 0:
+		overlay = pygame.Surface(display.get_size(), pygame.SRCALPHA)
+		font = pygame.font.SysFont(None, size)
+		lines = message
+		for ln in lines:
+			txt = font.render(ln, True, color)
+			overlay.blit(txt, (x, y))
+			y += 32
+		display.blit(overlay, (0, 0))
+		_help_ticks -= 1
+	return _help_ticks
 
 
 def combat_main(display: pygame.Surface, player: Character, enemy: Character):
@@ -17,8 +35,6 @@ def combat_main(display: pygame.Surface, player: Character, enemy: Character):
 
 	running = True
 	clock = pygame.time.Clock()
-
-	result = ''
 
 	### Combat initialization ###
 	for item in player.inventory:
@@ -85,14 +101,20 @@ def combat_main(display: pygame.Surface, player: Character, enemy: Character):
 		(255, 0, 0),
 		(0, 255, 0),
 	)
+	message_time = 0
+	power = ''
+	damage = 0
 
 	### main loop ###
 	while running:
 		display.blit(background, (0, 0))
 
 		### Exit Button ###
-		if exit_button.pressed():
+		if exit_button.pressed() == True:
 			running = False
+			return running
+			break
+			continue
 
 		### Inventory ###
 		inventory_buttons = []
@@ -116,29 +138,62 @@ def combat_main(display: pygame.Surface, player: Character, enemy: Character):
 				)
 			)
 
-		for i in inventory_buttons:
-			if i.pressed():
-				player.inventory[i.id].effect(
-					player, enemy, player.inventory[i.id]
-				)
-
 		### Update Profiles ###
 		player_hp_bar.value = player.current_health
 		enemy_hp_bar.value = enemy.current_health
 
 		### Render Elements ###
-		exit_button.render(display)
-
+		if enemy.current_health < 0:
+			exit_button.render(display)
+			player_turn = True
+		elif player.current_health <= 0:
+			return False
+		x = 0
 		if player_turn:
 			inventory_title.render(display)
 			for i in range(len(inventory_buttons) - 1, -1, -1):
 				inventory_buttons[i].render(display)
+		else:
+			message_time = 500
+			time.sleep(0.8)
+			if len(enemy.inventory) > 0:
+				x = random.randint(0, len(enemy.inventory) - 1)
+				before = str(player.current_health)[:]
+				# print(before)
+				power = enemy.inventory[x].name
+				enemy.inventory[x].effect(player, enemy, enemy.inventory[x])
+				player_turn = True
+				damage = int(before) - player.current_health
+				# print(damage)
+			else:
+				damage = random.randint(10, 50)
+				power = 'itself being toxic'
+				player.current_health -= damage
+				player_turn = True
+		for i in inventory_buttons:
+			if i.pressed():
+				player.inventory[i.id].effect(
+					player, enemy, player.inventory[i.id]
+				)
+				player_turn = False
 
 		player_title.render(display)
 		player_hp_bar.render(display)
 
 		enemy_title.render(display)
 		enemy_hp_bar.render(display)
+
+		message_time = message(
+			message_time,
+			[
+				f'Enemy used {power}, which dealt you {damage} damage. You are at {player.current_health} health'
+			],
+			display,
+			(window_height - 40) // 2,
+			40,
+			40,
+			(225, 0, 0),
+		)
 
 		### Event Handling ###
 		for event in pygame.event.get():
@@ -149,5 +204,3 @@ def combat_main(display: pygame.Surface, player: Character, enemy: Character):
 		clock.tick(common.FPS)
 
 		pygame.display.update()
-
-	return result
