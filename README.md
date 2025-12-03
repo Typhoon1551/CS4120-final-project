@@ -27,12 +27,14 @@ This project uses [UV](https://docs.astral.sh/uv/) for dependency management. In
   - [x] Buttons
   - [x] Text Boxes
   - [x] Progress Bars
-  - [ ] Icons
+  - [ ] Icons (no)
   - [x] Tooltips
 - [x] Run passive item effects at start of battle
 - [x] Item Selection
 - [x] Run active item effect when used
 - [x] Initialize combat data
-- [ ] Turn Cycle
-- [ ] Enemy AI
-- [ ] Return win/lose state
+- [x] Turn Cycle
+  - [ ] fix turn cycle timing
+- [x] Enemy AI
+  - [ ] More advanced AI?
+- [x] Return win/lose state
