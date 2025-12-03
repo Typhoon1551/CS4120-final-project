@@ -161,10 +161,10 @@ def main():
 	player = character.Character(
 		700,
 		[
-			items.health_potion(100),
-			items.health_potion(100),
-			items.health_potion(100),
 			items.basic_wand(level),
+			items.health_potion(100),
+			items.health_potion(100),
+			items.health_potion(100),
 		],
 		"John Fish",
 		"A cute little guppy",
@@ -406,7 +406,7 @@ def main():
 				level += 1
 				story.remove_upgrade(phys_rect)
 				health_message.insert(0, 600)
-				player.inventory.append(items.basic_wand(level))
+				player.inventory[0] = items.basic_wand(level)
 
 			try:
 				if health_message[0] > 60:

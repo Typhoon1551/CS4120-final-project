@@ -6,10 +6,14 @@ T_EMPTY: int = 0
 T_WALL: int = 1
 T_ENEMY: int = 2
 T_UPGRADE: int = 3
+
+### Colors ###
 COLOR_WATER_BG = (18, 28, 38)
 COLOR_PIPE_WALL = (180, 190, 200)
 COLOR_PIPE_OUTLINE = (130, 140, 150)
 COLOR_PORTAL_TILE = (68, 28, 38)
+
+ENEMY_TILE_COLOR = (255, 0, 255)
 
 
 # fmt: off
@@ -232,21 +236,21 @@ def draw_drain_chamber(
 				rx = c * TILE_SIZE - cam_x
 				ry = r * TILE_SIZE - cam_y
 				rect = Rect(rx, ry, TILE_SIZE, TILE_SIZE)
-				pygame.draw.rect(surface, COLOR_PIPE_WALL, rect)
-				pygame.draw.rect(surface, COLOR_PIPE_OUTLINE, rect, width=2)
+				_ = pygame.draw.rect(surface, COLOR_PIPE_WALL, rect)
+				_ = pygame.draw.rect(surface, COLOR_PIPE_OUTLINE, rect, width=2)
 			if DRAIN_CHAMBER_ROWS[r][c] == T_ENEMY:
 				rx = c * TILE_SIZE - cam_x
 				ry = r * TILE_SIZE - cam_y
 				rect = Rect(rx, ry, TILE_SIZE, TILE_SIZE)
-				pygame.draw.rect(surface, (0, 0, 0), rect)
+				_ = pygame.draw.rect(surface, ENEMY_TILE_COLOR, rect)
 			if (r, c) in PORTAL_TILES:
 				rx = c * TILE_SIZE - cam_x
 				ry = r * TILE_SIZE - cam_y
 				rect = Rect(rx, ry, TILE_SIZE, TILE_SIZE)
 				if y_n == 1:
-					pygame.draw.rect(surface, COLOR_PORTAL_TILE, rect)
+					_ = pygame.draw.rect(surface, COLOR_PORTAL_TILE, rect)
 				else:
-					pygame.draw.rect(surface, COLOR_WATER_BG, rect)
+					_ = pygame.draw.rect(surface, COLOR_WATER_BG, rect)
 
 
 def get_safe_start_rect(width: int = 40, height: int = 24) -> Rect:
