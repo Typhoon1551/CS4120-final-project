@@ -12,18 +12,18 @@ This project uses [UV](https://docs.astral.sh/uv/) for dependency management. In
 ## Feature Chart
 
 ### General
-- [ ] Learn PyGame
-- [ ] Design Player
+- [x] Learn PyGame
+- [x] Design Player
 
 ### Story
 - [x] Player Movement
 - [ ] Background
 - [ ] Interactive Map
-- [ ] Obstacles
-- [ ] Combat Encounters
+- [x] Obstacles
+- [x] Combat Encounters
 
 ### Combat
-- [ ] Custom UI Framework
+- [x] Custom UI Framework
   - [x] Buttons
   - [x] Text Boxes
   - [x] Progress Bars
@@ -32,7 +32,7 @@ This project uses [UV](https://docs.astral.sh/uv/) for dependency management. In
 - [x] Run passive item effects at start of battle
 - [x] Item Selection
 - [x] Run active item effect when used
-- [ ] Initialize combat data
+- [x] Initialize combat data
 - [ ] Turn Cycle
 - [ ] Enemy AI
 - [ ] Return win/lose state
