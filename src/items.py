@@ -71,7 +71,8 @@ def drain_o():
 
 def basic_wand(level: int):
 	def e(player: Character, enemy: Character, this: Item):
-		enemy.current_health -= 5**level
+		hp = enemy.current_health - 5**level
+		enemy.current_health = int(maths.clamp(hp, 0, 10000))
 
 	return Item(
 		True,
