@@ -170,13 +170,12 @@ def main():
 		"A cute little guppy",
 	)
 
-	enemy1 = character.Character(200,[], 'Feces Blockage', 'Death for you')
-	enemy2 = character.Character(500,[], 'Netting', 'Death for you')
-	enemy3 = character.Character(50,[], 'Floss', 'Death for you')
-	enemy4 = character.Character(100,[], 'Hair clump', 'Death for you')
-	enemy5 = character.Character(40,[], 'Grease', 'Death for you')
-	enemy6 = character.Character(150,[], 'Mold Colony', 'Death for you')
-
+	enemy1 = character.Character(200, [], "Feces Blockage", "Death for you")
+	enemy2 = character.Character(500, [], "Netting", "Death for you")
+	enemy3 = character.Character(50, [], "Floss", "Death for you")
+	enemy4 = character.Character(100, [], "Hair clump", "Death for you")
+	enemy5 = character.Character(40, [], "Grease", "Death for you")
+	enemy6 = character.Character(150, [], "Mold Colony", "Death for you")
 
 	player_hp_bar = ui.ProgressBar(
 		(display_size.current_w // 2 - 10, 20),
@@ -378,23 +377,28 @@ def main():
 				# health_message = message(health_message, ['-1'], display, 20, 100, 300, (225,0,0))
 
 			message1 = [
-				'WASD / Arrows to swim',
-				'Portals surround the pipes. they hurt a little',
-				'Use the portals to get around. Beware, some lead to enemies',
+				"WASD / Arrows to swim",
+				"Portals surround the pipes. they hurt a little",
+				"Use the portals to get around. Beware, some lead to enemies",
 				"but some lead to friends.",
-				'Debris = small damage',
+				"Debris = small damage",
 				"Don't hit the walls, it will hurt.",
-				'Find your enemies and destroy them',
+				"Find your enemies and destroy them",
 				"Use your wizard powers to stay safe",
-				'Look around for upgrades, they will matter a lot.',
-				'You have these items:',
+				"Look around for upgrades, they will matter a lot.",
+				"You have these items:",
 			]
 
 			for x in list(player.inventory):
 				message1.append(str(x.description))
 
 			_help_ticks = message(
-				_help_ticks, message1, display, 40, display_size.current_w - 500, 40
+				_help_ticks,
+				message1,
+				display,
+				40,
+				display_size.current_w - 500,
+				40,
 			)
 			if len(health_message) > 0:
 				index = 0
