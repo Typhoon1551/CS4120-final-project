@@ -1,7 +1,7 @@
 # CS4120-final-project
 
 ## Description
-This is a simple adventure that uses an LLM to generate a unique experience every time
+This is a simple adventure game about a fish navigating sewers, featuring a complex environment and turn-based combat.
 
 ## Running
 This project uses [UV](https://docs.astral.sh/uv/) for dependency management. In order to run the project:
