@@ -13,7 +13,7 @@ class Text:
 		size: int,
 		color: tuple[int, int, int] = (0, 0, 0),
 		sys_font: bool = True,
-		font: str = 'Arial',
+		font: str = "Arial",
 	):
 		self.text = text
 		self.color = color
@@ -34,7 +34,7 @@ def draw_text(
 	text: str,
 	width: int | None,
 	font_size: int,
-	font_family: tuple[str, bool] = ('Arial', True),
+	font_family: tuple[str, bool] = ("Arial", True),
 	color: tuple[int, int, int] = (255, 255, 255),
 ) -> pygame.Surface:
 	if not f.get_init():

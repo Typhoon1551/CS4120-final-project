@@ -20,7 +20,7 @@ class Button:
 		size: tuple[int, int],
 		text: str,
 		text_color: tuple[int, int, int] = (0, 0, 0),
-		text_font: tuple[str, bool] = ('Arial', True),
+		text_font: tuple[str, bool] = ("Arial", True),
 		id: Any | None = None,
 		color: tuple[int, int, int] = (255, 255, 255),
 		hovered_color: tuple[int, int, int] = (200, 200, 200),
@@ -50,7 +50,7 @@ class Button:
 		font_color: tuple[int, int, int],
 		font_size: int,
 		padding: int,
-		font_family: tuple[str, bool] = ('Arial', True),
+		font_family: tuple[str, bool] = ("Arial", True),
 	):
 		self.tool_tip = ui.TextBox(
 			(self.position[0], self.position[1] + self.size[1]),

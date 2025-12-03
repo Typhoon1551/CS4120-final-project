@@ -1,19 +1,22 @@
 import pygame
 import random
-from typing import List, Tuple
 
-# fmt: off
 TILE_SIZE: int = 64
 T_EMPTY: int = 0
 T_WALL: int = 1
 T_ENEMY: int = 2
-T_UPGRADE: int=3
+T_UPGRADE: int = 3
+
+### Colors ###
 COLOR_WATER_BG = (18, 28, 38)
 COLOR_PIPE_WALL = (180, 190, 200)
 COLOR_PIPE_OUTLINE = (130, 140, 150)
 COLOR_PORTAL_TILE = (68, 28, 38)
 
+ENEMY_TILE_COLOR = (255, 0, 255)
 
+
+# fmt: off
 DRAIN_CHAMBER_ROWS = [
 	#0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23
 	[1,1,1,1,1,1,1,1,1,1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], #0
@@ -29,6 +32,7 @@ DRAIN_CHAMBER_ROWS = [
 	[1,0,1,3,2,0,1,1,2,1, 0, 1, 3, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1], #10
 	[1,1,1,1,1,1,1,1,0,1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], #11
 ]
+# fmt: on
 
 MAP_H_TILES = len(DRAIN_CHAMBER_ROWS)
 MAP_W_TILES = len(DRAIN_CHAMBER_ROWS[0])
@@ -36,7 +40,7 @@ MAP_W_PX = MAP_W_TILES * TILE_SIZE
 
 MAP_H_PX = MAP_H_TILES * TILE_SIZE
 
-PORTAL_TILES: List[Tuple[int, int]] = []
+PORTAL_TILES: list[tuple[int, int]] = []
 for r in range(MAP_H_TILES):
 	for c in range(MAP_W_TILES):
 		if DRAIN_CHAMBER_ROWS[r][c] == T_EMPTY and (
@@ -113,6 +117,7 @@ def rect_collides_walls(rect: Rect) -> bool:
 					return True
 	return False
 
+
 def is_upgrade(rect: Rect) -> bool:
 	left_tile = max(0, rect.left // TILE_SIZE)
 	right_tile = min(MAP_W_TILES - 1, max(0, (rect.right - 1) // TILE_SIZE))
@@ -142,6 +147,7 @@ def remove_upgrade(rect: Rect) -> bool:
 				)
 				if rect.colliderect(tile_rect):
 					DRAIN_CHAMBER_ROWS[r][c] = T_EMPTY
+
 
 def is_enemey(rect: Rect) -> bool:
 	left_tile = max(0, rect.left // TILE_SIZE)
@@ -175,6 +181,8 @@ def remove_enemy(rect: Rect) -> bool:
 
 
 R = 0
+
+
 def try_move(rect: Rect, dx: int, dy: int):
 	try:
 		R += 1
@@ -201,7 +209,7 @@ def try_move(rect: Rect, dx: int, dy: int):
 
 def get_camera_offset(
 	player_rect: Rect, screen_w: int, screen_h: int
-) -> Tuple[int, int]:
+) -> tuple[int, int]:
 	cam_x = player_rect.centerx - screen_w // 2
 	cam_y = player_rect.centery - screen_h // 2
 	cam_x = max(0, min(cam_x, max(0, MAP_W_PX - screen_w)))
@@ -210,7 +218,7 @@ def get_camera_offset(
 
 
 def draw_drain_chamber(
-	surface: pygame.Surface, cam_off: Tuple[int, int]
+	surface: pygame.Surface, cam_off: tuple[int, int]
 ) -> None:
 	cam_x, cam_y = cam_off
 	sw, sh = surface.get_size()
@@ -228,21 +236,21 @@ def draw_drain_chamber(
 				rx = c * TILE_SIZE - cam_x
 				ry = r * TILE_SIZE - cam_y
 				rect = Rect(rx, ry, TILE_SIZE, TILE_SIZE)
-				pygame.draw.rect(surface, COLOR_PIPE_WALL, rect)
-				pygame.draw.rect(surface, COLOR_PIPE_OUTLINE, rect, width=2)
+				_ = pygame.draw.rect(surface, COLOR_PIPE_WALL, rect)
+				_ = pygame.draw.rect(surface, COLOR_PIPE_OUTLINE, rect, width=2)
 			if DRAIN_CHAMBER_ROWS[r][c] == T_ENEMY:
 				rx = c * TILE_SIZE - cam_x
 				ry = r * TILE_SIZE - cam_y
 				rect = Rect(rx, ry, TILE_SIZE, TILE_SIZE)
-				pygame.draw.rect(surface, (0, 0, 0), rect)
+				_ = pygame.draw.rect(surface, ENEMY_TILE_COLOR, rect)
 			if (r, c) in PORTAL_TILES:
 				rx = c * TILE_SIZE - cam_x
 				ry = r * TILE_SIZE - cam_y
 				rect = Rect(rx, ry, TILE_SIZE, TILE_SIZE)
 				if y_n == 1:
-					pygame.draw.rect(surface, COLOR_PORTAL_TILE, rect)
+					_ = pygame.draw.rect(surface, COLOR_PORTAL_TILE, rect)
 				else:
-					pygame.draw.rect(surface, COLOR_WATER_BG, rect)
+					_ = pygame.draw.rect(surface, COLOR_WATER_BG, rect)
 
 
 def get_safe_start_rect(width: int = 40, height: int = 24) -> Rect:
@@ -261,7 +269,7 @@ def get_safe_start_rect(width: int = 40, height: int = 24) -> Rect:
 	return Rect(x, y, width, height)
 
 
-def get_world_size_px() -> Tuple[int, int]:
+def get_world_size_px() -> tuple[int, int]:
 	return MAP_W_PX, MAP_H_PX
 
 
@@ -330,27 +338,100 @@ def spawn_debris_near(cx: int, cy: int, count: int = 3):
 
 
 FLOW: dict[tuple[int, int], tuple[float, float]] = {
-	(2, 0): (1.0, 0.0), (2, 1): (1.5, 0.0), (2, 2): (1.5, 0.0), (2, 3): (1.5, 0.0), 
-	(2, 4): (1.5, 0.0), (2, 5): (1.5, 0.5), (2, 6): (1.5, 0.0), (2, 7): (1.5, 1.2), 
-	(2, 8): (1.5, 0.0), (2, 9): (1.5, 0.0), (2, 10): (1.5, 0.0), (2, 11): (2.0, 0.4), 
-	(2, 12): (1.5, 0.0), (2, 13): (1.5, 0.0), (2, 14): (1.5, 0.0), (2, 15): (0.0, 2.5),(2,19):(0.0,-1.0),(3,19):(0.0,-5.0), 
-	(3, 0): (1.0, 0.0), (3, 1): (1.5, 0.0), (3, 2): (1.5, 0.0), (3, 3): (1.5, 0.0), 
-	(3, 4): (1.5, 0.0), (3, 5): (1.5, -1.5), (3, 6): (1.5, 0.0), (3, 7): (1.5, 0.0), (3, 8): (1.5, 0.0), 
-	(3, 9): (1.5, 0.0), (3, 10): (1.5, 0.0), (3, 11): (0.5, -2.0), (3, 12): (1.5, 0.0), (3, 13): 
-	(1.5, 0.0), (3, 14): (1.5, 0.0), (3, 15): (1.5, 1.0), (3, 16): (1.0, 1.5), (4, 15):(1.5,0.0),(4, 16): (0.2, 3.4), 
-	(5, 16): (1.0, 1.7), (6, 16): (2.2, 1.5), (6, 17): (2.3, 0.0), (6, 18): (2.3, 0.0), (6, 19): 
-	(2.3, 0.0), (6, 20): (2.3, 0.0), (6, 21): (2.3, 0.0), (6, 22): (2.3, 0.0), (6, 23): (1.0, 0.0), 
-	(7, 16): (2.3, 0.0), (7, 17): (2.3, 0.0), (7, 18): (2.3, 0.0), (7, 19): (2.3, 0.0), (7, 20): 
-	(2.3, 0.0), (7, 21): (2.3, 0.0), (7, 22): (2.3, 0.0), (7, 23): (1.0, 0.0), (1, 16): (-1.5, 0.0), 
-	(1, 17): (-1.5, 0.0), (1, 18): (-1.5, 0.0), (1, 19): (-1.5, -0.5), (1, 20): (-1.5, 0.0), 
-	(1, 21): (-1.5, 0.0), (1, 22): (-1.5, 0.0), (1, 15): (-0.8, 1.5), (1, 7): (0.0, 1.2), 
-	(5, 1): (1.8, 0.0), (5, 2): (1.8, 0.0), (5, 3): (1.8, 0.0), (5, 4): (1.8, 0.0), (5, 5): (0.8, -2.8), 
-	(4, 5): (-0.2, -1.4), (6, 5): (0.0, -1.4), (7, 5): (0.0, -1.4), (8, 5): (0.0, -1.4), 
-	(9, 5): (0.0, -1.4), (10, 5): (1.0, -1.4), (4, 10): (0.0, -1.2), (5, 10): (0.0, -1.2), 
-	(6, 10): (0.0, -1.2), (7, 10): (0.0, -1.2), (8, 10): (0.0, -1.2), (9, 10): (0.0, -1.2), 
-	(10, 10): (0.0, -1.2), (6, 12): (1.4, 0.0), (6, 13): (1.4, 0.0), (6, 14): (1.4, 0.0), 
-	(7, 14): (0.0, 1.0), (9, 15): (1.0, 0.0), (9, 16): (1.0, 0.0), (9, 1): (0.0, -1.0), 
-	(10, 1): (0.0, -1.0), (10, 3): (1.0, 0.0), (10, 4): (1.0, 0.0), (10,8):(-4.0,-4.0),(9,8):(-1.0,-1.0)}
+	(2, 0): (1.0, 0.0),
+	(2, 1): (1.5, 0.0),
+	(2, 2): (1.5, 0.0),
+	(2, 3): (1.5, 0.0),
+	(2, 4): (1.5, 0.0),
+	(2, 5): (1.5, 0.5),
+	(2, 6): (1.5, 0.0),
+	(2, 7): (1.5, 1.2),
+	(2, 8): (1.5, 0.0),
+	(2, 9): (1.5, 0.0),
+	(2, 10): (1.5, 0.0),
+	(2, 11): (2.0, 0.4),
+	(2, 12): (1.5, 0.0),
+	(2, 13): (1.5, 0.0),
+	(2, 14): (1.5, 0.0),
+	(2, 15): (0.0, 2.5),
+	(2, 19): (0.0, -1.0),
+	(3, 19): (0.0, -5.0),
+	(3, 0): (1.0, 0.0),
+	(3, 1): (1.5, 0.0),
+	(3, 2): (1.5, 0.0),
+	(3, 3): (1.5, 0.0),
+	(3, 4): (1.5, 0.0),
+	(3, 5): (1.5, -1.5),
+	(3, 6): (1.5, 0.0),
+	(3, 7): (1.5, 0.0),
+	(3, 8): (1.5, 0.0),
+	(3, 9): (1.5, 0.0),
+	(3, 10): (1.5, 0.0),
+	(3, 11): (0.5, -2.0),
+	(3, 12): (1.5, 0.0),
+	(3, 13): (1.5, 0.0),
+	(3, 14): (1.5, 0.0),
+	(3, 15): (1.5, 1.0),
+	(3, 16): (1.0, 1.5),
+	(4, 15): (1.5, 0.0),
+	(4, 16): (0.2, 3.4),
+	(5, 16): (1.0, 1.7),
+	(6, 16): (2.2, 1.5),
+	(6, 17): (2.3, 0.0),
+	(6, 18): (2.3, 0.0),
+	(6, 19): (2.3, 0.0),
+	(6, 20): (2.3, 0.0),
+	(6, 21): (2.3, 0.0),
+	(6, 22): (2.3, 0.0),
+	(6, 23): (1.0, 0.0),
+	(7, 16): (2.3, 0.0),
+	(7, 17): (2.3, 0.0),
+	(7, 18): (2.3, 0.0),
+	(7, 19): (2.3, 0.0),
+	(7, 20): (2.3, 0.0),
+	(7, 21): (2.3, 0.0),
+	(7, 22): (2.3, 0.0),
+	(7, 23): (1.0, 0.0),
+	(1, 16): (-1.5, 0.0),
+	(1, 17): (-1.5, 0.0),
+	(1, 18): (-1.5, 0.0),
+	(1, 19): (-1.5, -0.5),
+	(1, 20): (-1.5, 0.0),
+	(1, 21): (-1.5, 0.0),
+	(1, 22): (-1.5, 0.0),
+	(1, 15): (-0.8, 1.5),
+	(1, 7): (0.0, 1.2),
+	(5, 1): (1.8, 0.0),
+	(5, 2): (1.8, 0.0),
+	(5, 3): (1.8, 0.0),
+	(5, 4): (1.8, 0.0),
+	(5, 5): (0.8, -2.8),
+	(4, 5): (-0.2, -1.4),
+	(6, 5): (0.0, -1.4),
+	(7, 5): (0.0, -1.4),
+	(8, 5): (0.0, -1.4),
+	(9, 5): (0.0, -1.4),
+	(10, 5): (1.0, -1.4),
+	(4, 10): (0.0, -1.2),
+	(5, 10): (0.0, -1.2),
+	(6, 10): (0.0, -1.2),
+	(7, 10): (0.0, -1.2),
+	(8, 10): (0.0, -1.2),
+	(9, 10): (0.0, -1.2),
+	(10, 10): (0.0, -1.2),
+	(6, 12): (1.4, 0.0),
+	(6, 13): (1.4, 0.0),
+	(6, 14): (1.4, 0.0),
+	(7, 14): (0.0, 1.0),
+	(9, 15): (1.0, 0.0),
+	(9, 16): (1.0, 0.0),
+	(9, 1): (0.0, -1.0),
+	(10, 1): (0.0, -1.0),
+	(10, 3): (1.0, 0.0),
+	(10, 4): (1.0, 0.0),
+	(10, 8): (-4.0, -4.0),
+	(9, 8): (-1.0, -1.0),
+}
 
 
 def clear_flow():
@@ -443,4 +524,6 @@ def setup_flow():
 	set_flow_rect(10, 3, 10, 4, 1.0, 0.0)
 	print(FLOW)
 	"""
+
+
 # fmt: on

@@ -11,7 +11,7 @@ class Item:
 	name: str
 	description: str
 	icon: pygame.Surface | None
-	effect: Callable[[Character, Character, 'Item'], Any]
+	effect: Callable[[Character, Character, "Item"], Any]
 
 	def __init__(self, _active, _name, _description, _icon, _effect):
 		self.active = _active
@@ -22,19 +22,19 @@ class Item:
 
 
 # example item creation:
-def health_potion(healing):
-	def e(player: Character, enemy: Character, this: Item):
+def health_potion(healing: int):
+	def e(player: Character, _: Character, this: Item):
 		player.current_health += healing
-		player.current_health = maths.clamp(
-			player.current_health, 0, player.max_health
+		player.current_health = int(
+			maths.clamp(player.current_health, 0, player.max_health)
 		)
 		player.inventory.remove(this)
 		player.inventory.append(empty_bottle())
 
 	return Item(
 		True,
-		'Health Potion',
-		f'A potion that heals you for {healing} hp',
+		"Health Potion",
+		f"A potion that heals you for {healing} hp",
 		None,
 		e,
 	)
@@ -47,7 +47,7 @@ def empty_bottle():
 
 	return Item(
 		True,
-		'Empty Bottle',
+		"Empty Bottle",
 		"Break on enemy's head to deal 10 damage",
 		None,
 		effect,
@@ -62,21 +62,21 @@ def drain_o():
 
 	return Item(
 		True,
-		'Drain-O',
-		'Pour out to deal 100 damage to yourself and enemy',
+		"Drain-O",
+		"Pour out to deal 100 damage to yourself and enemy",
 		None,
 		effect,
 	)
 
 
-def basic_wand(level):
+def basic_wand(level: int):
 	def e(player: Character, enemy: Character, this: Item):
 		enemy.current_health -= 5**level
 
 	return Item(
 		True,
-		f'Basic Wand, level {level}',
-		f'Wave to deal enemy {5**level} damage',
+		f"Basic Wand, level {level}",
+		f"Wave to deal enemy {5**level} damage",
 		None,
 		e,
 	)
