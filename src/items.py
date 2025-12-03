@@ -22,11 +22,11 @@ class Item:
 
 
 # example item creation:
-def health_potion(healing):
-	def e(player: Character, enemy: Character, this: Item):
+def health_potion(healing: int):
+	def e(player: Character, _: Character, this: Item):
 		player.current_health += healing
-		player.current_health = maths.clamp(
-			player.current_health, 0, player.max_health
+		player.current_health = int(
+			maths.clamp(player.current_health, 0, player.max_health)
 		)
 		player.inventory.remove(this)
 		player.inventory.append(empty_bottle())
@@ -69,7 +69,7 @@ def drain_o():
 	)
 
 
-def basic_wand(level):
+def basic_wand(level: int):
 	def e(player: Character, enemy: Character, this: Item):
 		enemy.current_health -= 5**level
 

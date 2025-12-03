@@ -188,6 +188,7 @@ def main():
 	enemies = [enemy1, enemy2, enemy3, enemy4, enemy5, enemy6]
 	for x in enemies:
 		x.inventory.append(items.drain_o())
+
 	### Main Loop ###
 	while True:
 		c = (225, 225, 225)
@@ -361,6 +362,7 @@ def main():
 				player.current_health = hit[0]
 				health_message.append(hit[1])
 			index = 0
+
 			for x in health_message:
 				health_message[index] = message(
 					health_message[index],
@@ -373,16 +375,18 @@ def main():
 				)
 				index += 1
 				# health_message = message(health_message, ['-1'], display, 20, 100, 300, (225,0,0))
+
 			message1 = [
 				"WASD / Arrows to swim",
 				"Portals surround the pipes. they hurt a little",
 				"Debris = small damage",
 				"Don't hit the walls, it will hurt.",
 				"Find your enemies and destroy them",
-				"Use your wizard powers to stay safe"
+				"Use your wizard powers to stay safe",
 				"Look around for upgrades, they will matter a lot.",
 				"You have these items:",
 			]
+
 			for x in list(player.inventory):
 				message1.append(str(x.description))
 

@@ -127,7 +127,7 @@ def combat_main(display: pygame.Surface, player: Character, enemy: Character):
 		enemy_profile.update_info(enemy)
 
 		### Render Elements ###
-		if enemy.current_health < 0:
+		if enemy.current_health <= 0:
 			exit_button.render(display)
 			player_turn = True
 		elif player.current_health <= 0:
