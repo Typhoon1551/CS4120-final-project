@@ -1,7 +1,7 @@
 # CS4120-final-project
 
 ## Description
-This is a simple adventure that uses an LLM to generate a unique experience every time
+This is a simple adventure game about a fish navigating sewers, featuring a complex environment and turn-based combat.
 
 ## Running
 This project uses [UV](https://docs.astral.sh/uv/) for dependency management. In order to run the project:
@@ -12,27 +12,29 @@ This project uses [UV](https://docs.astral.sh/uv/) for dependency management. In
 ## Feature Chart
 
 ### General
-- [ ] Learn PyGame
-- [ ] Design Player
+- [x] Learn PyGame
+- [x] Design Player
 
 ### Story
 - [x] Player Movement
 - [ ] Background
 - [ ] Interactive Map
-- [ ] Obstacles
-- [ ] Combat Encounters
+- [x] Obstacles
+- [x] Combat Encounters
 
 ### Combat
-- [ ] Custom UI Framework
+- [x] Custom UI Framework
   - [x] Buttons
   - [x] Text Boxes
   - [x] Progress Bars
-  - [ ] Icons
+  - [ ] Icons (no)
   - [x] Tooltips
 - [x] Run passive item effects at start of battle
 - [x] Item Selection
 - [x] Run active item effect when used
-- [ ] Initialize combat data
-- [ ] Turn Cycle
-- [ ] Enemy AI
-- [ ] Return win/lose state
+- [x] Initialize combat data
+- [x] Turn Cycle
+  - [ ] fix turn cycle timing
+- [x] Enemy AI
+  - [ ] More advanced AI?
+- [x] Return win/lose state
