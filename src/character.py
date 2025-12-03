@@ -8,7 +8,7 @@ class Character:
 	name: str
 	description: str
 	character_design = {
-		"color": (0, 120, 120),
+		"color": (255, 150, 38),
 		"left": 50,
 		"top": 100,
 		"width": 25,
