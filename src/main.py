@@ -175,7 +175,7 @@ def main():
 	enemy2 = character.Character(500,[], 'Netting', 'Death for you')
 	enemy3 = character.Character(50,[], 'Floss', 'Death for you')
 	enemy4 = character.Character(100,[], 'Hair clump', 'Death for you')
-	enemy5 = character.Character(40,[], 'Grese', 'Death for you')
+	enemy5 = character.Character(40,[], 'Grease', 'Death for you')
 	enemy6 = character.Character(150,[], 'Mold Colony', 'Death for you')
 
 
