@@ -167,10 +167,10 @@ def combat_main(display: pygame.Surface, player: Character, enemy: Character):
 		message_time = message(
 			message_time,
 			[
-				f"Enemy used {power}, which dealt you {damage} damage. You are at {player.current_health} health"
+				f"Enemy used {power}, which dealt you {damage} damage. \nYou are at {player.current_health} health"
 			],
 			display,
-			(window_height - 40) // 2,
+			(window_height - 80) // 2,
 			40,
 			40,
 			(225, 0, 0),
