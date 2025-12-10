@@ -1,7 +1,7 @@
 # external imports
 import pygame
 import pygame.locals
-import sys
+import os, sys
 import random
 import time
 import ui
@@ -14,6 +14,14 @@ from adventure import story
 import common
 
 
+def resource_path(relative_path):
+	try:
+		base_path = sys._MEIPASS
+	except Exception:
+		base_path = os.path.dirname(os.path.abspath(__file__))
+	return os.path.join(base_path, relative_path)
+
+
 def message(
 	_help_ticks, message, display, y, x, size=28, color=(235, 245, 255)
 ):
@@ -24,7 +32,7 @@ def message(
 		for ln in lines:
 			txt = font.render(ln, True, color)
 			overlay.blit(txt, (x, y))
-			y += 45
+			y += size + 10
 		display.blit(overlay, (0, 0))
 		_help_ticks -= 1
 	return _help_ticks
@@ -122,10 +130,14 @@ def find_enemy(enemies):
 
 def main():
 	pygame.init()
+
+	icon = pygame.image.load(resource_path("/assets/fish_icon.png"))
 	display_size = pygame.display.Info()
 	display = pygame.display.set_mode(
 		(display_size.current_w, display_size.current_h), pygame.RESIZABLE
 	)
+	icon1 = pygame.display.set_icon(icon)
+
 	story.setup_flow()
 	tilesw = 3
 	tilesh = 3
@@ -159,6 +171,7 @@ def main():
 	level = 1
 	### Player/Enemy Initialization ###
 	player = character.Character(
+		50000,
 		700,
 		[
 			items.basic_wand(level),
@@ -168,15 +181,16 @@ def main():
 		],
 		"John Fish",
 		"A cute little guppy",
+		vis_rect,
 	)
 
-	enemy1 = character.Character(200, [], "Pizza Box", "Death for you")
-	enemy2 = character.Character(500, [], "Netting", "Death for you")
-	enemy3 = character.Character(50, [], "Floss", "Death for you")
-	enemy4 = character.Character(100, [], "Hair clump", "Death for you")
-	enemy5 = character.Character(40, [], "Grease", "Death for you")
-	enemy6 = character.Character(150, [], "Mold Colony", "Death for you")
-
+	enemy1 = character.Character(200, 200, [], "Pizza Box", "Death for you")
+	enemy2 = character.Character(500, 500, [], "Netting", "Death for you")
+	enemy3 = character.Character(50, 50, [], "Floss", "Death for you")
+	enemy4 = character.Character(100, 100, [], "Hair clump", "Death for you")
+	enemy5 = character.Character(40, 40, [], "Grease", "Death for you")
+	enemy6 = character.Character(150, 150, [], "Mold Colony", "Death for you")
+	print(player.max_health)
 	player_hp_bar = ui.ProgressBar(
 		(display_size.current_w // 2 - 10, 20),
 		(display_size.current_w // 2 - 40, 20),
@@ -222,6 +236,47 @@ def main():
 			pygame.quit()
 			sys.exit()
 			break
+		elif player.current_health == 50000:
+			overlay = pygame.Surface(display.get_size(), pygame.SRCALPHA)
+			lines = [
+				"Welcome to FISH",
+				"You are a young goldfish wizard who, after a duel, somehow ended up in this system of pipes",
+				"You must learn about what obstacles lie in your path and eliminate them if you wish to ever get home",
+				"Use the WASD / Arrows to swim",
+				"Portals surround the pipes. They hurt a little",
+				"Use the portals to get around. Beware, some lead to enemies, but some lead to upgrades.",
+				"Pink squares are enemies, teal squares are upgades",
+				"Debris = small damage",
+				"Don't hit the walls, it will hurt.",
+				"Find your enemies and destroy them",
+				"Use your wizard powers to stay safe",
+				"Look around for upgrades, they will matter a lot.",
+				"You have these items:",
+			]
+			for x in list(player.inventory):
+				lines.append(str(str(x.name) + ": " + str(x.description)))
+			exit_button = ui.Button(
+				(40, display_size.current_h - 200),
+				(100, 50),
+				"Play!",
+				color=(255, 255, 255),
+				hovered_color=(255, 0, 0),
+				padding=10,
+			)
+			while True:
+				_help_ticks = (
+					message(_help_ticks, lines, display, 30, 30, 40) + 1
+				)
+				if exit_button.pressed() == True:
+					player.current_health = 700
+					break
+				for event in pygame.event.get():
+					if event.type == pygame.locals.QUIT:
+						pygame.quit()
+						sys.exit()
+
+				exit_button.render(display)
+				pygame.display.flip()
 
 		elif all(e.current_health <= 0 for e in enemies):
 			overlay = pygame.Surface(display.get_size(), pygame.SRCALPHA)
@@ -282,8 +337,8 @@ def main():
 			phys_rect.center = vis_rect.center
 
 			fx, fy = story.flow_at(phys_rect.centerx, phys_rect.centery)
-			mdx = dx + int(round(fx))
-			mdy = dy + int(round(fy))
+			mdx = dx + (fx)
+			mdy = dy + (fy)
 
 			if mdx == 0 and mdy == 0 and (fx or fy):
 				nudge_x = 1 if fx > 0 else -1 if fx < 0 else 0
@@ -300,7 +355,7 @@ def main():
 			old = phys_rect
 
 			if mdx or mdy:
-				phys_rect = story.try_move(phys_rect, mdx, mdy)
+				phys_rect = story.try_move(phys_rect, mdx, mdy, player)
 				vis_rect.center = phys_rect.center
 				cd["left"], cd["top"] = vis_rect.left, vis_rect.top
 
@@ -335,6 +390,7 @@ def main():
 							phys_rect,
 							-4 if mdx >= 0 else 4,
 							-4 if mdy >= 0 else 4,
+							player,
 						)
 						vis_rect.center = phys_rect.center
 						cd["left"], cd["top"] = vis_rect.left, vis_rect.top
@@ -355,8 +411,8 @@ def main():
 				20,
 			)
 
-			if ((phys_rect.centerx - old.centerx) != mdx) or (
-				(phys_rect.centery - old.centery) != mdy
+			if ((phys_rect.centerx - old.centerx) != int(mdx)) and (
+				(phys_rect.centery - old.centery) != int(mdy)
 			):
 				hit = hit1(player.current_health, health_message)
 				player.current_health = hit[0]
@@ -437,12 +493,14 @@ def main():
 				while end:
 					mdx = (mdx + random.randint(-1, 1)) * -1
 					mdy = (mdy + random.randint(-1, 1)) * -1
-					phys_rect = story.try_move(phys_rect, (mdx), (mdy))
+					phys_rect = story.try_move(phys_rect, (mdx), (mdy), player)
 					end = story.is_enemey(phys_rect)
 					if not end:
 						mdx = dx + int(round(fx)) * 4
 						mdy = dy + int(round(fy)) * 4
-						phys_rect = story.try_move(phys_rect, (mdx), (mdy))
+						phys_rect = story.try_move(
+							phys_rect, (mdx), (mdy), player
+						)
 						end = story.is_enemey(phys_rect)
 
 			player_hp_bar.value = player.current_health
