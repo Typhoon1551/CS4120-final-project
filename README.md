@@ -12,7 +12,7 @@ This project uses [UV](https://docs.astral.sh/uv/) for dependency management. In
 3. Run `uv run src/main.py` in the project root. UV will handle virtual environments and dependencies for you.
 
 ### .pkg Application (MacOS only)
-Download Fish-1.0.pkg and Fish-Installation-Guide-macOS.pdf from the [latest release](https://github.com/Typhoon1551/CS4120-final-project/releases/latest) and follow the instructions to run it.
+Download `Fish-1.0.pkg` and `Fish-Installation-Guide-macOS.pdf` from the [latest release](https://github.com/Typhoon1551/CS4120-final-project/releases/latest) and follow the instructions to run it.
 
 ## Feature Chart
 
