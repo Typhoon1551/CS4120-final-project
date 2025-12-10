@@ -133,7 +133,7 @@ def main():
 
 	icon = pygame.image.load(
 		resource_path(
-			"/Users/zeb/Downloads/CS4120-final-project/src/assets/fish_icon.png"
+			"/assets/fish_icon.png"
 		)
 	)
 	display_size = pygame.display.Info()
