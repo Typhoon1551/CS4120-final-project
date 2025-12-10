@@ -131,11 +131,7 @@ def find_enemy(enemies):
 def main():
 	pygame.init()
 
-	icon = pygame.image.load(
-		resource_path(
-			"/assets/fish_icon.png"
-		)
-	)
+	icon = pygame.image.load(resource_path("/assets/fish_icon.png"))
 	display_size = pygame.display.Info()
 	display = pygame.display.set_mode(
 		(display_size.current_w, display_size.current_h), pygame.RESIZABLE
