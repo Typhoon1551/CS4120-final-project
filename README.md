@@ -1,7 +1,9 @@
 # CS4120-final-project
 
 ## Description
-This is a simple adventure game about a fish navigating sewers, featuring a complex environment and turn-based combat.
+This is a simple adventure game about a fish navigating sewers, featuring a complex environment and turn-based combat. The git can be found at: https://github.com/Typhoon1551/CS4120-final-project 
+
+See releases for MacOS .pkg installer.
 
 ## Running
 This project uses [UV](https://docs.astral.sh/uv/) for dependency management. In order to run the project:
