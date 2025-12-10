@@ -1,6 +1,7 @@
 from typing import Any
 import pygame
 
+
 class Character:
 	current_health: int
 	max_health: int
@@ -16,7 +17,15 @@ class Character:
 	}
 	last: pygame.Rect
 
-	def __init__(self, _health, _max, _starting_inven, _name, _description, _last = pygame.Rect(0,0,0,0)):
+	def __init__(
+		self,
+		_health,
+		_max,
+		_starting_inven,
+		_name,
+		_description,
+		_last=pygame.Rect(0, 0, 0, 0),
+	):
 		self.current_health = _health
 		self.max_health = _max
 		self.inventory = _starting_inven

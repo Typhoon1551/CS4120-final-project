@@ -15,11 +15,12 @@ import common
 
 
 def resource_path(relative_path):
-    try:
-        base_path = sys._MEIPASS
-    except Exception:
-        base_path = os.path.dirname(os.path.abspath(__file__))
-    return os.path.join(base_path, relative_path)
+	try:
+		base_path = sys._MEIPASS
+	except Exception:
+		base_path = os.path.dirname(os.path.abspath(__file__))
+	return os.path.join(base_path, relative_path)
+
 
 def message(
 	_help_ticks, message, display, y, x, size=28, color=(235, 245, 255)
@@ -31,7 +32,7 @@ def message(
 		for ln in lines:
 			txt = font.render(ln, True, color)
 			overlay.blit(txt, (x, y))
-			y += size+10
+			y += size + 10
 		display.blit(overlay, (0, 0))
 		_help_ticks -= 1
 	return _help_ticks
@@ -130,7 +131,11 @@ def find_enemy(enemies):
 def main():
 	pygame.init()
 
-	icon = pygame.image.load(resource_path("/Users/zeb/Downloads/CS4120-final-project/src/assets/fish_icon.png"))
+	icon = pygame.image.load(
+		resource_path(
+			"/Users/zeb/Downloads/CS4120-final-project/src/assets/fish_icon.png"
+		)
+	)
 	display_size = pygame.display.Info()
 	display = pygame.display.set_mode(
 		(display_size.current_w, display_size.current_h), pygame.RESIZABLE
@@ -180,7 +185,7 @@ def main():
 		],
 		"John Fish",
 		"A cute little guppy",
-		vis_rect
+		vis_rect,
 	)
 
 	enemy1 = character.Character(200, 200, [], "Pizza Box", "Death for you")
@@ -253,7 +258,7 @@ def main():
 				"You have these items:",
 			]
 			for x in list(player.inventory):
-				lines.append(str(str(x.name)+": "+str(x.description)))
+				lines.append(str(str(x.name) + ": " + str(x.description)))
 			exit_button = ui.Button(
 				(40, display_size.current_h - 200),
 				(100, 50),
@@ -263,9 +268,11 @@ def main():
 				padding=10,
 			)
 			while True:
-				_help_ticks=message(_help_ticks,lines,display,30,30,40)+1
+				_help_ticks = (
+					message(_help_ticks, lines, display, 30, 30, 40) + 1
+				)
 				if exit_button.pressed() == True:
-					player.current_health=700
+					player.current_health = 700
 					break
 				for event in pygame.event.get():
 					if event.type == pygame.locals.QUIT:
@@ -274,7 +281,7 @@ def main():
 
 				exit_button.render(display)
 				pygame.display.flip()
-			
+
 		elif all(e.current_health <= 0 for e in enemies):
 			overlay = pygame.Surface(display.get_size(), pygame.SRCALPHA)
 			font = pygame.font.SysFont(None, 500)
@@ -334,8 +341,8 @@ def main():
 			phys_rect.center = vis_rect.center
 
 			fx, fy = story.flow_at(phys_rect.centerx, phys_rect.centery)
-			mdx = dx + ((fx))
-			mdy = dy + ((fy))
+			mdx = dx + (fx)
+			mdy = dy + (fy)
 
 			if mdx == 0 and mdy == 0 and (fx or fy):
 				nudge_x = 1 if fx > 0 else -1 if fx < 0 else 0
@@ -387,7 +394,7 @@ def main():
 							phys_rect,
 							-4 if mdx >= 0 else 4,
 							-4 if mdy >= 0 else 4,
-							player
+							player,
 						)
 						vis_rect.center = phys_rect.center
 						cd["left"], cd["top"] = vis_rect.left, vis_rect.top
@@ -495,7 +502,9 @@ def main():
 					if not end:
 						mdx = dx + int(round(fx)) * 4
 						mdy = dy + int(round(fy)) * 4
-						phys_rect = story.try_move(phys_rect, (mdx), (mdy), player)
+						phys_rect = story.try_move(
+							phys_rect, (mdx), (mdy), player
+						)
 						end = story.is_enemey(phys_rect)
 
 			player_hp_bar.value = player.current_health

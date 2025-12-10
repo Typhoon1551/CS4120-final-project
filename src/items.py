@@ -81,5 +81,3 @@ def basic_wand(level: int):
 		None,
 		e,
 	)
-
-
